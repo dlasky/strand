@@ -32,17 +32,28 @@
 				value:true
 			}
 		},
+
 		ready:function() {
-			this._connection = indexedDB.open(this.db, _version);
-			this.listen(this._connection, 'error', '_handleError');
-			this.listen(this._connection, 'success', '_handleResult');
-			this.listen(this._connection, 'upgradeneeded', '_handleUpgrade');
-			this.listen(this._connection, 'versionchange', '_handleVersion');
+			this._req= indexedDB.open(this.db, _version);
+			this.listen(this._req, 'error', '_handleError');
+			this.listen(this._req, 'success', '_handleResult');
+			this.listen(this._req, 'upgradeneeded', '_handleUpgrade');
+			this.listen(this._req, 'versionchange', '_handleVersion');
 		},
+
+		_handleError: function() {
+
+		},
+
+		_handleResult: function() {
+
+		},
+
 		_handleUpgrade: function() {
-			var objectStore = db.createObjectStore(this.entity, { keyPath:this.keyPath });
-			objectStore.createIndex('name');
+			var objectStore = this._req.result.createObjectStore(this.entity, { keyPath:this.keyPath });
+			objectStore.createIndex(this.keyPath, this.keyPath, { unique: false });
 		},
+
 		add:function(data) {
 			var transaction = this._connection.transaction([this.entity], 'readwrite');
 			var prom = new Promise(function(resolve, reject) {
@@ -59,7 +70,7 @@
 		},
 
 		//TODO bind to array slices as well as the utility methods
-		
+
 		update:function(data, query) {
 
 		},
