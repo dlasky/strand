@@ -3,6 +3,10 @@
 	var _version = 1;
 	var DataUtils = StrandLib.DataUtils;
 
+	function _queryFactory(q) {
+
+	}
+
 	scope.LocalDB = Polymer({
 		is:'mm-localdb',
 
@@ -13,19 +17,23 @@
 		properties: {
 			entity:{
 				type:String,
-				notify:true
+				notify:true,
+				value:"entity"
 			},
-			query:{
-				type:String,
-				notify:true
-			},
-			db:{
+			dbName:{
 				type:String,
 				value:"mm-cache"
 			},
 			keyPath:{
 				type:String,
 				value:"id"
+			},
+			data:{
+				type:Array,
+				value:function() {
+					return [];
+				},
+				notify:true
 			},
 			auto:{
 				type:Boolean,
@@ -34,38 +42,44 @@
 		},
 
 		ready:function() {
-			this._req= indexedDB.open(this.db, _version);
-			this.listen(this._req, 'error', '_handleError');
-			this.listen(this._req, 'success', '_handleResult');
-			this.listen(this._req, 'upgradeneeded', '_handleUpgrade');
-			this.listen(this._req, 'versionchange', '_handleVersion');
+			var openRequest = indexedDB.open(this.dbName, _version);
+			this.listen(openRequest, 'error', '_handleError');
+			this.listen(openRequest, 'success', '_handleSuccess');
+			this.listen(openRequest, 'upgradeneeded', '_handleUpgrade');
+			this.listen(openRequest, 'versionchange', '_handleVersion');
 		},
 
-		_handleError: function() {
-
+		_handleError: function(e) {
+			console.log(e);
+			this.fire('error', e);
 		},
 
-		_handleResult: function() {
-
+		_handleSuccess: function(e) {
+			console.log(e);
+			this._db = e.target.result;
 		},
 
-		_handleUpgrade: function() {
-			var objectStore = this._req.result.createObjectStore(this.entity, { keyPath:this.keyPath });
+		_handleUpgrade: function(e) {
+			console.log(e);
+			this._db = e.target.result;
+			var objectStore = this._db.createObjectStore(this.entity, { keyPath:this.keyPath });
 			objectStore.createIndex(this.keyPath, this.keyPath, { unique: false });
 		},
 
 		add:function(data) {
-			var transaction = this._connection.transaction([this.entity], 'readwrite');
+			var transaction = this._db.transaction([this.entity], 'readwrite');
 			var prom = new Promise(function(resolve, reject) {
 				var objStore = transaction.objectStore(this.entity);
-				if(DataUtils.isType(data, "object")) {
+				if (DataUtils.isType(data, "array")) {
 					data.forEach(function(obj) {
 						objStore.add(obj);
 					});
+				} else if (DataUtils.isType(data, "object")) {
+					objStore.add(data);
 				}
 				transaction.oncomplete = resolve;
 				transaction.onerror = reject;
-			})
+			}.bind(this));
 			return prom;
 		},
 
@@ -74,11 +88,38 @@
 		update:function(data, query) {
 
 		},
-		remove:function(data) {
 
+		remove:function(key) {
+			if (DataUtils.isType(key, "object")) {
+				key = key[this.keyPath];
+			}
+			var transaction = this._db.transaction([this.entity], 'readwrite');
+			var prom = new Promise(function(resolve, reject) {
+				var objStore = transaction.objectStore(this.entity);
+				objStore.delete(key);
+				transaction.oncomplete = resolve;
+				transaction.onerror = reject;
+			}.bind(this));
 		},
-		query: function(query) {
 
+		query: function(query) {
+			var transaction = this._db.transaction([this.entity], 'readonly');
+			var objStore = transaction.objectStore(this.entity);
+			var cusorReq = objectStore.openCursor();
+			var prom = new Promise(function(resolve, reject) {
+				cursorReq.onsucess = function() {
+					var cursor = cursorReq.result;
+					var dt = [];
+
+				};
+				cursorReq.onerror = reject;
+			}.bind(this));
+		},
+
+		all: function() {
+			var transaction = this._db.transaction([this.entity], 'readonly');
+			var objStore = transaction.objectStore(this.entity);
+			// var query =
 		}
 	});
 }(window.Strand = window.Strand || {}));
