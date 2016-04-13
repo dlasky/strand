@@ -66,60 +66,86 @@
 			objectStore.createIndex(this.keyPath, this.keyPath, { unique: false });
 		},
 
-		add:function(data) {
-			var transaction = this._db.transaction([this.entity], 'readwrite');
-			var prom = new Promise(function(resolve, reject) {
-				var objStore = transaction.objectStore(this.entity);
-				if (DataUtils.isType(data, "array")) {
-					data.forEach(function(obj) {
-						objStore.add(obj);
-					});
-				} else if (DataUtils.isType(data, "object")) {
-					objStore.add(data);
+		_promFactory: function(item) {
+			return new Promise(function(resolve, reject) {
+				item.onsuccess = function(e) {
+					resolve(e.target.result || e);
 				}
-				transaction.oncomplete = resolve;
-				transaction.onerror = reject;
-			}.bind(this));
-			return prom;
+				item.onerror = reject;
+			});
+		},
+
+		_objFactory: function(mode, operation, args) {
+			mode = mode || 'readwrite';
+			operation = operation || function() {}
+			var transaction = this._db.transaction([this.entity], mode);
+			var store = transaction.objectStore(this.entity);
+			var req = operation(store, args);
+			if (Array.isArray(req)) {
+				prom = Promise.all(req.map(this._promFactory))
+			} else {
+				prom = this._promFactory(req);
+			}
+
+			return {
+				store: store,
+				transaction: transaction,
+				promise: prom
+			};
+		},
+
+		add:function(data) {
+			var req = this._objFactory('readwrite', function(store) {
+				if (Array.isArray(data)) {
+					return data.map(function(obj) {
+						return store.add(obj);
+					});
+				} else {
+					return store.add(data);
+				}
+			});
+			return req.promise;
 		},
 
 		//TODO bind to array slices as well as the utility methods
 
-		update:function(data, query) {
-
+		update:function(data, key) {
+			if (key) {
+				return this.query(key).then(function(result) {
+					var dt = DataUtils.copy({}, result, data);
+					return this._objFactory('readwrite', function(store) {
+						return store.put(dt);
+					}).promise
+				});
+			}
+			return this._objFactory('readwrite', function(store) {
+				return store.put(data);
+			}).promise;
 		},
 
 		remove:function(key) {
 			if (DataUtils.isType(key, "object")) {
 				key = key[this.keyPath];
 			}
-			var transaction = this._db.transaction([this.entity], 'readwrite');
-			var prom = new Promise(function(resolve, reject) {
-				var objStore = transaction.objectStore(this.entity);
-				objStore.delete(key);
-				transaction.oncomplete = resolve;
-				transaction.onerror = reject;
-			}.bind(this));
+			var req = this._objFactory('readwrite', function(store) {
+				return store.delete(key);
+			});
+			return req.promise;
 		},
 
-		query: function(query) {
-			var transaction = this._db.transaction([this.entity], 'readonly');
-			var objStore = transaction.objectStore(this.entity);
-			var cusorReq = objectStore.openCursor();
-			var prom = new Promise(function(resolve, reject) {
-				cursorReq.onsucess = function() {
-					var cursor = cursorReq.result;
-					var dt = [];
-
-				};
-				cursorReq.onerror = reject;
-			}.bind(this));
+		query: function(key) {
+			if (DataUtils.isType(key, "object")) {
+				key = key[this.keyPath];
+			}
+			return this._objFactory('readonly', function(store) {
+				return store.get(key);
+			}).promise;
 		},
 
 		all: function() {
-			var transaction = this._db.transaction([this.entity], 'readonly');
-			var objStore = transaction.objectStore(this.entity);
-			// var query =
+			return this._objFactory('readonly', function(store) {
+				return store.getAll();
+			}).promise;
 		}
 	});
 }(window.Strand = window.Strand || {}));
