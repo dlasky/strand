@@ -4,7 +4,7 @@
 	var DataUtils = StrandLib.DataUtils;
 
 	scope.LocalDB = Polymer({
-		is:'mm-localdb',
+		is:'strand-localdb',
 
 		behaviors:[
 			StrandTraits.Falsifiable,
@@ -18,7 +18,7 @@
 			},
 			dbName:{
 				type:String,
-				value:"mm-cache"
+				value:"strand-cache"
 			},
 			keyPath:{
 				type:String,
