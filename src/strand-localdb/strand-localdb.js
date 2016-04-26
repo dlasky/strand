@@ -16,6 +16,10 @@
 				notify:true,
 				value:"entity"
 			},
+			recordCount:{
+				type:Number,
+				notify:true
+			},
 			dbName:{
 				type:String,
 				value:"strand-cache"
@@ -73,21 +77,21 @@
 			return new Promise(function(resolve, reject) {
 				item.onsuccess = function(e) {
 					resolve(e.target.result || e);
-				}
+				};
 				item.onerror = reject;
 			});
 		},
 
 		_objFactory: function(mode, operation, storeName) {
 			mode = mode || 'readwrite';
-			operation = operation || function(store) { return store.get(); }
+			operation = operation || function(store) { return store.get(); };
 			storeName = storeName || this.entity;
 
 			var transaction = this._db.transaction([storeName], mode);
 			var store = transaction.objectStore(storeName);
 			var req = operation(store);
 			if (Array.isArray(req)) {
-				prom = Promise.all(req.map(this._promFactory))
+				prom = Promise.all(req.map(this._promFactory));
 			} else {
 				prom = this._promFactory(req);
 			}
@@ -151,13 +155,13 @@
 		update:function(data, key, entity, updateCallback) {
 			updateCallback = updateCallback || function(result, data) {
 				return DataUtils.copy({}, result, data);
-			}
+			};
 			if (key) {
 				return this.query(key, entity).then(function(result) {
 					var dt = updateCallback(result, data);
 					return this._objFactory('readwrite', function(store) {
 						return store.put(dt);
-					}).promise
+					}).promise;
 				}.bind(this));
 			}
 			return this._objFactory('readwrite', function(store) {
@@ -178,7 +182,7 @@
 		search: function(text, index) {
 			index = index || 'name';
 			var o = [];
-			console.time('cur')
+			console.time('cur');
 			var prom = new Promise(function( resolve, reject) {
 
 				this._objFactory('readonly', function(store) {
@@ -192,9 +196,9 @@
 							cursor.continue();
 						} else {
 							resolve(o);
-							console.timeEnd('cur')
+							console.timeEnd('cur');
 						}
-					}
+					};
 					return store.get('name');
 				});
 			}.bind(this));
