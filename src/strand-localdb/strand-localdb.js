@@ -42,7 +42,6 @@
 		},
 
 		ready:function() {
-			console.time('open');
 			var openRequest = indexedDB.open(this.dbName, _version);
 			this.listen(openRequest, 'error', '_handleError');
 			this.listen(openRequest, 'success', '_handleSuccess');
@@ -51,7 +50,7 @@
 		},
 
 		delete: function() {
-			indexedDB.deleteDataBase(this.dbName);
+			indexedDB.deleteDatabase(this.dbName);
 		},
 
 		_handleError: function(e) {
@@ -70,11 +69,6 @@
 			var objectStore = this._db.createObjectStore(this.entity, { keyPath:this.keyPath });
 			objectStore.createIndex(this.keyPath, this.keyPath, { unique: false });
 			objectStore.createIndex('name', 'name', { unique: false });
-
-			//METADATA FOR FT SEARCH
-			var metaStore = this._db.createObjectStore('meta', {keyPath:'one'});
-			metaStore.createIndex('one', 'one', {unique:true});
-			metaStore.createIndex('two', 'two', {unique:true});
 		},
 
 		_promFactory: function(item) {
@@ -107,51 +101,24 @@
 			};
 		},
 
-		add:function(data, entity, ignoreMeta) {
+		add:function(data, entity) {
 			var req = this._objFactory('readwrite', function(store) {
 				if (Array.isArray(data)) {
 					return data.map(function(obj) {
-						if (!ignoreMeta)
-							this.addMeta(obj.name, obj.id);
 						return store.add(obj);
 					}, this);
 				} else {
-					if (!ignoreMeta)
-						this.addMeta(data.name, data.id);
 					return store.add(data);
 				}
 			}.bind(this), entity);
 			return req.promise;
 		},
 
-		addMeta: function(raw, resultKey) {
-			raw = raw.toUpperCase();
-			var chars = [].concat.apply([], Array(26))
-				.map(function(_, i) { return String.fromCharCode(i+65); })
-				.filter(function(c) {
-					return raw.includes(c);
-				})
-				.map(function(c) {
-					this.writeMeta(c, resultKey);
-				},this);
-		},
-
-		writeMeta: function(meta, resultKey) {
-			this.query(meta, 'meta').then(function(result) {
-				if (result instanceof Event) {
-					var o = {
-						one:meta,
-						keys:[resultKey]
-					};
-					this.add(o,'meta',true);
-				} else {
-					this.update(o, meta, 'meta', function(result, data) {
-						result.keys.push(data);
-						return result;
-					});
-					console.log('result',result);
-				}
-			}.bind(this));
+		test: function() {
+			function b(a){return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b)}
+			for(var i=0;i<70000;i++) {
+				this.add({name:b(),id:i});
+			}
 		},
 
 		//TODO bind to array slices as well as the utility methods
@@ -186,7 +153,6 @@
 		search: function(text, index) {
 			index = index || 'name';
 			var o = [];
-			console.time('cur');
 			var prom = new Promise(function( resolve, reject) {
 
 				this._objFactory('readonly', function(store) {
@@ -200,7 +166,6 @@
 							cursor.continue();
 						} else {
 							resolve(o);
-							console.timeEnd('cur');
 						}
 					};
 					return store.get('name');
@@ -220,7 +185,8 @@
 
 		all: function() {
 			return this._objFactory('readonly', function(store) {
-				return store.getAll();
+				if (store.getAll)
+					return store.getAll();
 			}).promise;
 		}
 	});
