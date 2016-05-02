@@ -50,6 +50,10 @@
 			this.listen(openRequest, 'versionchange', '_handleVersion');
 		},
 
+		delete: function() {
+			indexedDB.deleteDataBase(this.dbName);
+		},
+
 		_handleError: function(e) {
 			console.log(e);
 			this.fire('error', e);
