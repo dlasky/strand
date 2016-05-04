@@ -35,6 +35,16 @@
 				},
 				notify:true
 			},
+			meta:{
+				type:Object,
+				value:function() { return {count:0}; },
+				notify:true
+			},
+			search:{
+				type:String,
+				value:"",
+				notify:true
+			},
 			auto:{
 				type:Boolean,
 				value:true
@@ -43,14 +53,13 @@
 
 		ready:function() {
 			var openRequest = indexedDB.open(this.dbName, _version);
-			this.listen(openRequest, 'error', '_handleError');
-			this.listen(openRequest, 'success', '_handleSuccess');
+			this._promFactory(openRequest).then(this._handleSuccess.bind(this), this._handleError.bind(this));
 			this.listen(openRequest, 'upgradeneeded', '_handleUpgrade');
 			this.listen(openRequest, 'versionchange', '_handleVersion');
 		},
 
 		delete: function() {
-			indexedDB.deleteDatabase(this.dbName);
+			return this._promFactory(indexedDB.deleteDatabase(this.dbName));
 		},
 
 		_handleError: function(e) {
@@ -60,7 +69,7 @@
 
 		_handleSuccess: function(e) {
 			console.log(e);
-			this._db = e.target.result;
+			this._db = e;
 		},
 
 		_handleUpgrade: function(e) {
@@ -74,7 +83,8 @@
 		_promFactory: function(item) {
 			return new Promise(function(resolve, reject) {
 				item.onsuccess = function(e) {
-					resolve(e.target.result || e);
+					resolve(e.target.result || e.result || e);
+					// resolve(DataUtils.getPathValue('target.result',e) || DataUtils.getPathValue('result',e) || e);
 				};
 				item.onerror = reject;
 			});
@@ -101,6 +111,25 @@
 			};
 		},
 
+		_cursorFactory: function(store, conditionCallback) {
+			//rewrite this to not return the promise maybe?
+			conditionCallback = conditionCallback || function(o) { return true; };
+			return new Promise(function(resolve, reject) {
+				var o = [];
+				var c = store.openCursor();
+				c.onsuccess = function(e) {
+					var cursor = e.target.result;
+					if (cursor && conditionCallback(cursor.value)) {
+						o.push(cursor.value);
+					} else {
+						resolve(o);
+					}
+				};
+				c.onerror = reject;
+			});
+
+		},
+
 		add:function(data, entity) {
 			var req = this._objFactory('readwrite', function(store) {
 				if (Array.isArray(data)) {
@@ -115,7 +144,7 @@
 		},
 
 		test: function() {
-			function b(a){return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b)}
+			function b(a){return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b);}
 			for(var i=0;i<70000;i++) {
 				this.add({name:b(),id:i});
 			}
@@ -150,7 +179,7 @@
 			return req.promise;
 		},
 
-		search: function(text, index) {
+		_search: function(text, index) {
 			index = index || 'name';
 			var o = [];
 			var prom = new Promise(function( resolve, reject) {
@@ -183,10 +212,22 @@
 			}, entity).promise;
 		},
 
-		all: function() {
+		count: function() {
 			return this._objFactory('readonly', function(store) {
-				if (store.getAll)
+				var idx = store.index('id');
+				return idx.count();
+			}).promise;
+		},
+
+		all: function() {
+			var o = [];
+			return this._objFactory('readonly', function(store) {
+				if (store.getAll) {
 					return store.getAll();
+				} else {
+					return this._cursorFactory(store);
+				}
+				
 			}).promise;
 		}
 	});
