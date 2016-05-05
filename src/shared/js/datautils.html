@@ -112,10 +112,13 @@
 		if (typeof path === "string") {
 			p = path.split(".");
 		}
-		return p.reduce(function(prev, curr) {
-			if (!_isType(prev, "object") || !(curr in prev)) return null;
-			return prev[curr];
-		}, object);
+		try {
+			return p.reduce(function(prev, curr) {
+				return prev[curr];
+			}, object);
+		} catch (e) {
+			return null;
+		}
 	}
 
 	function _setPathValue(path, object, value, create) {
