@@ -43,7 +43,8 @@
 			search:{
 				type:String,
 				value:"",
-				notify:true
+				notify:true,
+				observer:"_searchChanged"
 			},
 			auto:{
 				type:Boolean,
@@ -70,6 +71,20 @@
 		_handleSuccess: function(e) {
 			console.log(e);
 			this._db = e;
+			this.count().then(function(c) {
+				this.set('meta.count',c);
+			}.bind(this));
+			this.all().then(function(d) {
+				this._raw = d;
+				this.set('data',d);
+			}.bind(this));
+		},
+
+		_searchChanged: function() {
+			if (this.search)
+			this.set('data', this._raw.filter(function(o) {
+				return o.name.toLowerCase().includes(this.search.toLowerCase());
+			},this));
 		},
 
 		_handleUpgrade: function(e) {
@@ -81,10 +96,10 @@
 		},
 
 		_promFactory: function(item) {
+			if (item instanceof Promise) return item;
 			return new Promise(function(resolve, reject) {
 				item.onsuccess = function(e) {
-					resolve(e.target.result || e.result || e);
-					// resolve(DataUtils.getPathValue('target.result',e) || DataUtils.getPathValue('result',e) || e);
+					resolve(DataUtils.getPathValue('target.result',e) || DataUtils.getPathValue('result',e) || e);
 				};
 				item.onerror = reject;
 			});
@@ -119,15 +134,15 @@
 				var c = store.openCursor();
 				c.onsuccess = function(e) {
 					var cursor = e.target.result;
-					if (cursor && conditionCallback(cursor.value)) {
-						o.push(cursor.value);
+					if (cursor) {
+						if (conditionCallback(cursor.value)) o.push(cursor.value);
+						cursor.continue();
 					} else {
 						resolve(o);
 					}
 				};
 				c.onerror = reject;
 			});
-
 		},
 
 		add:function(data, entity) {
@@ -222,13 +237,14 @@
 		all: function() {
 			var o = [];
 			return this._objFactory('readonly', function(store) {
-				if (store.getAll) {
+				//if (store.getAll) {
+				if (false) {
 					return store.getAll();
 				} else {
 					return this._cursorFactory(store);
 				}
 				
-			}).promise;
+			}.bind(this)).promise;
 		}
 	});
 }(window.Strand = window.Strand || {}));
