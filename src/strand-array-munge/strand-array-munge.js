@@ -40,7 +40,7 @@
 		},
 
 		observers:[
-			'_handleInputUpdate(input.*, _parsedRules)',
+			'_handleInputUpdate(input.*, _parsedRules, highlight)',
 			'_handleInputUpdate(input.slices)',
 		],
 
@@ -66,8 +66,10 @@
 				}
 
 
-			}
-			if (this.input && this.input.length) {
+			} 
+			//TODO: (dlasky) test this against coll
+			// if (this.input && this.input.length) {
+			if (this.input) {
 				var o = this.input.map(this._generateModel,this);
 				this.set('output', o);
 			}

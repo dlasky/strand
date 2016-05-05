@@ -81,10 +81,12 @@
 		},
 
 		_searchChanged: function() {
-			if (this.search)
-			this.set('data', this._raw.filter(function(o) {
-				return o.name.toLowerCase().includes(this.search.toLowerCase());
-			},this));
+			if (this._raw) {
+				var search = this.search || '';
+				this.set('data', this._raw.filter(function(o) {
+					return o.name.toLowerCase().includes(search.toLowerCase());
+				},this));
+			}
 		},
 
 		_handleUpgrade: function(e) {

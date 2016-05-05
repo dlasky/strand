@@ -7,6 +7,7 @@
 		<link rel="import" href="../strand-dropdown/strand-dropdown.html">
 		<link rel="import" href="../strand-button/strand-button.html">
 		<link rel="import" href="../strand-input/strand-input.html">
+		<link rel="import" href="../strand-array-munge/strand-array-munge.html">
 		<style is="custom-style" type="text/css">
 			body, html {
 				height: 100%;
@@ -276,7 +277,8 @@
 	<template is="dom-bind">
 		<div>Count:{{meta.count}}</div>
 		<strand-localdb id="test" meta="{{meta}}" data="{{data}}" search="{{search}}"></strand-localdb>
-		<strand-dropdown data="{{data}}">
+		<strand-array-munge id="munge" input="[[data]]" output="{{arrayData}}" rules="name->name,id->value" highlight="{{search}}"></strand-array-munge>
+		<strand-dropdown id="ddl" data="{{arrayData}}">
 			<strand-input search clear placeholder="Search" value="{{search}}"></strand-input>
 		</strand-dropdown>
 	</template>
