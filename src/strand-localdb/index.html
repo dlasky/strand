@@ -8,6 +8,9 @@
 		<link rel="import" href="../strand-button/strand-button.html">
 		<link rel="import" href="../strand-input/strand-input.html">
 		<link rel="import" href="../strand-array-munge/strand-array-munge.html">
+		<link rel="import" href="../strand-grid/strand-grid.html">
+		<link rel="import" href="../strand-grid-item/strand-grid-item.html">
+		<link rel="import" href="../strand-grid-column/strand-grid-column.html">
 		<style is="custom-style" type="text/css">
 			body, html {
 				height: 100%;
@@ -281,6 +284,16 @@
 		<strand-dropdown id="ddl" data="{{arrayData}}">
 			<strand-input search clear placeholder="Search" value="{{search}}"></strand-input>
 		</strand-dropdown>
+	</template>
+
+		<template is="dom-bind">
+		<div>Count:{{meta.count}}</div>
+		<strand-localdb id="test" meta="{{meta}}" data="{{data}}" search="{{search}}"></strand-localdb>
+		<strand-input search clear placeholder="Search" value="{{search}}"></strand-input>
+		<strand-grid id="mmTestGrid1" selectable style="width: 100%; height: 300px;" data="{{data}}">
+			<strand-grid-column field="id">ID</strand-grid-column>
+			<strand-grid-column field="name">Name</strand-grid-column>
+		</strand-grid>
 	</template>
 	</body>
 </html>

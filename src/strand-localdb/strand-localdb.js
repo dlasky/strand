@@ -35,6 +35,13 @@
 				},
 				notify:true
 			},
+			input:{
+				type:Array,
+				value: function() {
+					return [];
+				},
+				notify:true
+			},
 			meta:{
 				type:Object,
 				value:function() { return {count:0}; },
@@ -57,6 +64,9 @@
 			this._promFactory(openRequest).then(this._handleSuccess.bind(this), this._handleError.bind(this));
 			this.listen(openRequest, 'upgradeneeded', '_handleUpgrade');
 			this.listen(openRequest, 'versionchange', '_handleVersion');
+
+			this._worker = new Worker('localdb-worker.js');
+			this.listen(this._worker, 'message', '_handleMessage');
 		},
 
 		delete: function() {
@@ -74,19 +84,29 @@
 			this.count().then(function(c) {
 				this.set('meta.count',c);
 			}.bind(this));
-			this.all().then(function(d) {
-				this._raw = d;
-				this.set('data',d);
-			}.bind(this));
+			// this.all().then(function(d) {
+			// 	this._raw = d;
+			// 	this.set('data',d);
+			// }.bind(this));
+		},
+
+		_handleMessage: function(e) {
+			console.log('message',e);
+			this.set('data',e.data);
 		},
 
 		_searchChanged: function() {
-			if (this._raw) {
-				var search = this.search || '';
-				this.set('data', this._raw.filter(function(o) {
-					return o.name.toLowerCase().includes(search.toLowerCase());
-				},this));
-			}
+			// if (this._raw) {
+			// 	var search = this.search || '';
+			// 	this.set('data', this._raw.filter(function(o) {
+			// 		return o.name.toLowerCase().includes(search.toLowerCase());
+			// 	},this));
+			// }
+			if (this._worker)
+			this._worker.postMessage({
+				type:'search',
+				needle:this.search || ''
+			});
 		},
 
 		_handleUpgrade: function(e) {
@@ -239,8 +259,7 @@
 		all: function() {
 			var o = [];
 			return this._objFactory('readonly', function(store) {
-				//if (store.getAll) {
-				if (false) {
+				if (store.getAll) {
 					return store.getAll();
 				} else {
 					return this._cursorFactory(store);
