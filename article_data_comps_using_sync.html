@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta charset="utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="HandheldFriendly" content="True"/>
+		<meta name="MobileOptimized" content="320"/>
+		<meta name="theme-color" content="#000000"/>
+		<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1"/>
+		<title>Strand Web Components</title>
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		<link rel="apple-touch-icon" href="apple-iphone-icon@2x.png" sizes="120x120" type="image/png" />
+		<link rel="apple-touch-icon" href="apple-ipad-icon@2x.png" sizes="152x152" type="image/png" />
+		<script language="javascript" src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+		<link rel="stylesheet" type="text/css" href="docs.css"/>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
+		<link rel="import" href="bower_components/strand/dist/strand.html"/>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.min.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/mode-html.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/theme-chrome.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/worker-html.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+	</head>
+	<body unresolved>
+		<strand-docs-shell id="docsShell" version="4.0.0" mobileHeader="Strand Docs">
+			<strand-docs-nav id="articlesNav">
+				<strand-header size="medium">Articles</strand-header>
+				<strand-list-item id="getting_started" value="article_getting_started.html">Getting Started</strand-list-item>
+				<strand-list-item id="data_comps_intro" value="article_data_comps_intro.html">Introduction to Data Components</strand-list-item>
+				<strand-list-item id="data_comps_using_ajax" value="article_data_comps_using_ajax.html" class="child"> Using strand-ajax</strand-list-item>
+				<strand-list-item id="data_comps_using_sync" value="article_data_comps_using_sync.html" class="child"> Using strand-sync</strand-list-item>
+				<strand-list-item id="grid_intro" value="article_grid_intro.html">Introduction to strand-grid</strand-list-item>
+				<strand-list-item id="grid_config" value="article_grid_config.html" class="child"> Configuring strand-grid</strand-list-item>
+				<strand-list-item id="grid_data_integration" value="article_grid_data_integration.html" class="child"> Data Integration with strand-grid</strand-list-item>
+				<strand-list-item id="grid_custom_grid_item" value="article_grid_custom_grid_item.html" class="child"> Creating Custom Grid Items</strand-list-item>
+				<strand-list-item id="migration_guide" value="article_migration_guide.html">Migration Guide</strand-list-item>
+				<strand-list-item id="repeater" value="article_repeater.html">Using strand-repeater</strand-list-item>
+			</strand-docs-nav>
+			<strand-docs-nav id="componentsNav">
+				<strand-header size="medium">Components</strand-header>
+				<strand-list-item id="strand-action" value="strand-action.html">strand-action</strand-list-item>
+				<strand-list-item id="strand-ajax" value="strand-ajax.html">strand-ajax</strand-list-item>
+				<strand-list-item id="strand-autocomplete" value="strand-autocomplete.html">strand-autocomplete</strand-list-item>
+				<strand-list-item id="strand-box" value="strand-box.html">strand-box</strand-list-item>
+				<strand-list-item id="strand-button" value="strand-button.html">strand-button</strand-list-item>
+				<strand-list-item id="strand-calendar" value="strand-calendar.html">strand-calendar</strand-list-item>
+				<strand-list-item id="strand-checkbox" value="strand-checkbox.html">strand-checkbox</strand-list-item>
+				<strand-list-item id="strand-collection" value="strand-collection.html">strand-collection</strand-list-item>
+				<strand-list-item id="strand-datepicker" value="strand-datepicker.html">strand-datepicker</strand-list-item>
+				<strand-list-item id="strand-dialog" value="strand-dialog.html">strand-dialog</strand-list-item>
+				<strand-list-item id="strand-drawer" value="strand-drawer.html">strand-drawer</strand-list-item>
+				<strand-list-item id="strand-dropdown" value="strand-dropdown.html">strand-dropdown</strand-list-item>
+				<strand-list-item id="strand-file-upload" value="strand-file-upload.html">strand-file-upload</strand-list-item>
+				<strand-list-item id="strand-footer" value="strand-footer.html">strand-footer</strand-list-item>
+				<strand-list-item id="strand-form" value="strand-form.html">strand-form</strand-list-item>
+				<strand-list-item id="strand-grid-column" value="strand-grid-column.html">strand-grid-column</strand-list-item>
+				<strand-list-item id="strand-grid-item" value="strand-grid-item.html">strand-grid-item</strand-list-item>
+				<strand-list-item id="strand-grid" value="strand-grid.html">strand-grid</strand-list-item>
+				<strand-list-item id="strand-group" value="strand-group.html">strand-group</strand-list-item>
+				<strand-list-item id="strand-guide" value="strand-guide.html">strand-guide</strand-list-item>
+				<strand-list-item id="strand-header" value="strand-header.html">strand-header</strand-list-item>
+				<strand-list-item id="strand-icon" value="strand-icon.html">strand-icon</strand-list-item>
+				<strand-list-item id="strand-inline-box" value="strand-inline-box.html">strand-inline-box</strand-list-item>
+				<strand-list-item id="strand-input-mask" value="strand-input-mask.html">strand-input-mask</strand-list-item>
+				<strand-list-item id="strand-input" value="strand-input.html">strand-input</strand-list-item>
+				<strand-list-item id="strand-list-item" value="strand-list-item.html">strand-list-item</strand-list-item>
+				<strand-list-item id="strand-loader" value="strand-loader.html">strand-loader</strand-list-item>
+				<strand-list-item id="strand-localstore" value="strand-localstore.html">strand-localstore</strand-list-item>
+				<strand-list-item id="strand-menu" value="strand-menu.html">strand-menu</strand-list-item>
+				<strand-list-item id="strand-modal" value="strand-modal.html">strand-modal</strand-list-item>
+				<strand-list-item id="strand-model" value="strand-model.html">strand-model</strand-list-item>
+				<strand-list-item id="strand-popover" value="strand-popover.html">strand-popover</strand-list-item>
+				<strand-list-item id="strand-progress-bar" value="strand-progress-bar.html">strand-progress-bar</strand-list-item>
+				<strand-list-item id="strand-pulldown-button" value="strand-pulldown-button.html">strand-pulldown-button</strand-list-item>
+				<strand-list-item id="strand-radio" value="strand-radio.html">strand-radio</strand-list-item>
+				<strand-list-item id="strand-repeater" value="strand-repeater.html">strand-repeater</strand-list-item>
+				<strand-list-item id="strand-scroll-panel" value="strand-scroll-panel.html">strand-scroll-panel</strand-list-item>
+				<strand-list-item id="strand-spinner" value="strand-spinner.html">strand-spinner</strand-list-item>
+				<strand-list-item id="strand-sync" value="strand-sync.html">strand-sync</strand-list-item>
+				<strand-list-item id="strand-tab" value="strand-tab.html">strand-tab</strand-list-item>
+				<strand-list-item id="strand-tabs" value="strand-tabs.html">strand-tabs</strand-list-item>
+				<strand-list-item id="strand-textarea" value="strand-textarea.html">strand-textarea</strand-list-item>
+				<strand-list-item id="strand-tooltip" value="strand-tooltip.html">strand-tooltip</strand-list-item>
+			</strand-docs-nav>
+			<div class="docs-logo">
+				<a class="strand-logo">
+					<img src="images/strand-logo.svg" />
+				</a>
+				<p class="mini-subhead version">v4.0.0</p>
+			</div>			<footer class="layout-footer">
+				<div class="docs-footer">
+					<div class="footer-logo-box">
+						<div class="powered-by">
+							<p class="mini-subhead">Powered By</p>
+							<a href="https://developer.mediamath.com/" target="_blank" class="powered-logo"></a>
+						</div>
+						<div class="mediamath">
+							<a href="http://mediamath.com/" target="_blank" class="mediamath-logo"></a>
+						</div>
+					</div>
+					<p class="license">&copy;2015 Strand Authors. Code licensed under the <a href="LICENSE.txt" target="_blank">BSD License</a>. Documentation licensed under <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p>
+				</div>
+			</footer>			<article class="layout-article">
+				<div class="docs-content article">
+					<h1 id="using-strand-sync">Using strand-sync</h1>
+<h2 id="overview">Overview</h2>
+<p>strand-sync provides a higher level API similar to jQuery or Backbone in terms of having pre-configured XHR calls for the most common RESTful scenarios. Sync is designed heavily around 2-way binding so virtually all of the request params can be manipulated via the DOM (and thus via 2-way binding) as we will see in the examples.</p>
+<p>Sync is used as the base class for all &#39;adapters&#39; which provide API specific implementations of sync that are usable with strand-model and strand-collection.</p>
+<p>Unlike strand-ajax which is designed to handle a single call at a time, strand-sync can handle multiple concurrent calls. The default concurrency setting is 4 simultaneous calls, but if more are desired they can be set via the <code>requestConcurrency</code> param (either markup or JS).</p>
+<h2 id="data-configuration">Data Configuration</h2>
+<p>Strand-Sync exposes a <code>data</code> property which can be set via JS or bound to to set the request body. This is actually serialized in strand-ajax so if you need to see the serialization code, please check there.</p>
+<p>a <code>url</code> property is also exposed and can be used to set the base or non-changing part of the URL.  Note that the urlParams are then concatenated into that URL using &#39;/&#39;&#39;s per element.</p>
+<h3 id="param-configuration">Param configuration</h3>
+<p>Sync accepts configuration via tags corresponding to HTTP methods: <code>&lt;get&gt;</code>, <code>&lt;post&gt;</code>, <code>&lt;put&gt;</code>, and <code>&lt;delete&gt;</code>. Params can then be passed to Sync as DOM children of those nodes.</p>
+<p>Params were designed to give the developer full flexibility over crafting the request arguments. With this in mind the param options were divided into:</p>
+<ul>
+<li>queryParam&thinsp;&mdash;&thinsp;name value pair objects used to generate the queryString</li>
+<li>urlParam&thinsp;&mdash;&thinsp;name only strings concatenated with &#39;/&#39; to generate a URL</li>
+<li>headers&thinsp;&mdash;&thinsp;name value pairs used to send additional metadata (CSRF, etc) to the webserver</li>
+</ul>
+<h3 id="get-example">GET example</h3>
+<pre><code class="lang-html">&lt;strand-sync endpoint=&quot;http://example.com&quot;&gt;
+    &lt;get&gt;
+        &lt;queryParam name=&quot;q&quot; value=&quot;123&quot;/&gt;
+        &lt;urlParam&gt;123&lt;/urlParam&gt;
+        &lt;header name=&quot;X-Some-Header&quot;&gt;HeaderValue&lt;/header&gt;
+    &lt;/get&gt;
+&lt;/strand-sync&gt;
+</code></pre>
+<p>This will generate a URL for the request of <code>http://example.com/123/?q=123</code> and it will send an X-Some-Header: HeaderValue to the server with the request. Note that it is possible to either use a value attribute or to just place the value inside the textContent of a named node. These formats may be used interchangeably.</p>
+<h3 id="post-example">POST example</h3>
+<pre><code class="lang-html">&lt;strand-sync endpoint=&quot;http://test.com&quot;&gt;
+    &lt;post&gt;
+        &lt;urlParam&gt;campaigns&lt;/urlParam&gt;
+        &lt;urlParam&gt;52312&lt;/urlParam&gt;
+        &lt;header name=&quot;X-CSRF-Header&quot;&gt;48ccbaffbb0675f2a&lt;/header&gt;
+    &lt;/post&gt;
+&lt;/strand-sync&gt;
+</code></pre>
+<p>Note that we use the urlParam twice&thinsp;&mdash;&thinsp;this may be done for any set of params <em>N</em> number of times as appropriate. Params are parsed top down for API&#39;s where the order matters.</p>
+<p>It is also possible to pass multiple sets of params to the same element to configure it for general I/O by adding sections at the same level:</p>
+<pre><code class="lang-html">&lt;strand-sync&gt;
+    &lt;get&gt;&lt;/get&gt;
+    &lt;post&gt;&lt;/post&gt;
+    &lt;put&gt;&lt;/put&gt;
+    &lt;delete&gt;&lt;/delete&gt;
+&lt;/strand-sync&gt;
+</code></pre>
+<h2 id="working-with-2-way-binding">Working with 2-way binding</h2>
+<p>To support 2-way binding in a scenario using strand-sync we have created the <code>auto</code> property. Auto tells strand-sync to respond automatically to data or param changes and make additional requests to sync the data back to the server. Auto may be set via JS or via HTML as an attribute.  Auto has 3 possible values:</p>
+<ul>
+<li>true <code>boolean</code>&thinsp;&mdash;&thinsp;bidirectional sync input/output for any changes</li>
+<li>load <code>string</code>&thinsp;&mdash;&thinsp;only sync data in from server when input params change</li>
+<li>save <code>string</code>&thinsp;&mdash;&thinsp;only sync data in from the server when the data property detects a change&thinsp;&mdash;&thinsp;note that due to Polymer 1.0 data binding limitations you must manually tell Polymer that the data has changed using <code>set</code></li>
+</ul>
+<pre><code class="lang-javascript">var sync = document.querySelector(&quot;strand-sync&quot;);
+sync.data.b = 2; //won&#39;t be picked up
+sync.set(&#39;data.b&#39;,2); //will be picked up by Polymer
+</code></pre>
+<h3 id="2-way-binding-on-the-input">2-way binding on the input</h3>
+<p>A fairly common scenario in modern web applications is a user entering search terms into an input and expecting a list of items as output. To accomplish this via strand-sync we would use 2-way binding between the input value and the API specific params.</p>
+<p>The following is an example of the simple input scenario using a self binding template.</p>
+<pre><code class="lang-html">    &lt;template is=&quot;dom-bind&quot;&gt;
+        &lt;strand-input value=&quot;{{search}}&quot;/&gt;
+    &lt;/template&gt;
+</code></pre>
+<p>Now bind this to a sync components params from our earlier example:</p>
+<pre><code class="lang-html">    &lt;template is=&quot;dom-bind&quot;&gt;
+        &lt;strand-input value=&quot;{{search}}&quot;/&gt;
+        &lt;strand-sync endpoint=&quot;http://example.com&quot; auto=&quot;true&quot;&gt;
+            &lt;get&gt;
+                &lt;queryParam name=&quot;q&quot; value=&quot;{{search}}&quot;/&gt;
+                &lt;urlParam&gt;123&lt;/urlParam&gt;
+                &lt;header name=&quot;X-Some-Header&quot;&gt;HeaderValue&lt;/header&gt;
+            &lt;/get&gt;
+        &lt;/strand-sync&gt;
+    &lt;/template&gt;
+</code></pre>
+<p>When the light DOM queryParam values are changed via 2-way binding, the sync component will pick this up and trigger the requisite <code>GET</code> calls to retrieve this query from the server. Note that this input is automatically debounced against keyboard input. If necessary you may vary this timing via the <code>autoDebounce</code> property. The default is 200ms.</p>
+<h3 id="2-way-binding-on-the-response">2-way binding on the response</h3>
+<p>Unfortunately this example does not provide any feedback to the user, but it is possible to easily output this via 2-way binding as well. As mentioned earlier the sync component exposes a bindable <code>data</code> property which is used for both input and output of bindable data. By binding this to a repeated template we can show the user a list of items (we assume these objects have a name property) matching their search:</p>
+<pre><code class="lang-html">    &lt;template is=&quot;auto-binding&quot;&gt;
+        &lt;input value=&quot;{{search}}&quot;&gt;
+        &lt;strand-sync url=&quot;http://example.com&quot; auto=&quot;true&quot; data=&quot;{{result}}&quot;&gt;
+            &lt;get&gt;
+                &lt;queryParam name=&quot;q&quot; value=&quot;{{search}}&quot;/&gt;
+                &lt;urlParam&gt;123&lt;/urlParam&gt;
+                &lt;header name=&quot;X-Some-Header&quot;&gt;HeaderValue&lt;/header&gt;
+            &lt;/get&gt;
+        &lt;/strand-sync&gt;
+        &lt;ul&gt;
+            &lt;template is=&quot;dom-repeat&quot; items=&quot;{{result.list}}&quot;&gt;
+                &lt;li&gt;{{item.name}}&lt;/li&gt;
+            &lt;/template&gt;
+        &lt;/ul&gt;        
+    &lt;/template&gt;
+</code></pre>
+
+				</div>
+				<div class="layout-push"></div>
+			</article>
+		</strand-docs-shell>
+		<script>
+			var name = "",
+				articlesNav,
+				componentsNav,
+				docsShell,
+				navItems; 
+
+			window.addEventListener('WebComponentsReady', function() {
+				initDoc();
+			});
+
+			function initDoc() {
+				articlesNav 	= Polymer.dom(document).querySelector("#articlesNav");
+				componentsNav 	= Polymer.dom(document).querySelector("#componentsNav");
+				docsShell 		= Polymer.dom(document).querySelector("#docsShell");
+				navItems 		= Polymer.dom(document).querySelectorAll("strand-list-item");
+
+				// default expanded:
+				articlesNav.expanded = true;
+				componentsNav.expanded = false;
+
+				hljs.initHighlighting();
+
+				Array.prototype.slice.call(navItems).forEach(function(item) {
+					if (item.id === name) {
+						item.selected = true;
+						return;
+					}
+				});
+
+				docsShell.addEventListener("docs-nav-selected", navigateToPage);
+			}
+
+			function navigateToPage(e) {
+				window.location = e.detail.value;
+			}
+		</script>
+	</body>
+</html>

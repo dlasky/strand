@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta charset="utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="HandheldFriendly" content="True"/>
+		<meta name="MobileOptimized" content="320"/>
+		<meta name="theme-color" content="#000000"/>
+		<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1"/>
+		<title>Strand Web Components</title>
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		<link rel="apple-touch-icon" href="apple-iphone-icon@2x.png" sizes="120x120" type="image/png" />
+		<link rel="apple-touch-icon" href="apple-ipad-icon@2x.png" sizes="152x152" type="image/png" />
+		<script language="javascript" src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+		<link rel="stylesheet" type="text/css" href="docs.css"/>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
+		<link rel="import" href="bower_components/strand/dist/strand.html"/>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.min.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/mode-html.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/theme-chrome.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/worker-html.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+	</head>
+	<body unresolved>
+		<strand-docs-shell id="docsShell" version="4.0.0" mobileHeader="Strand Docs">
+			<strand-docs-nav id="articlesNav">
+				<strand-header size="medium">Articles</strand-header>
+				<strand-list-item id="getting_started" value="article_getting_started.html">Getting Started</strand-list-item>
+				<strand-list-item id="data_comps_intro" value="article_data_comps_intro.html">Introduction to Data Components</strand-list-item>
+				<strand-list-item id="data_comps_using_ajax" value="article_data_comps_using_ajax.html" class="child"> Using strand-ajax</strand-list-item>
+				<strand-list-item id="data_comps_using_sync" value="article_data_comps_using_sync.html" class="child"> Using strand-sync</strand-list-item>
+				<strand-list-item id="grid_intro" value="article_grid_intro.html">Introduction to strand-grid</strand-list-item>
+				<strand-list-item id="grid_config" value="article_grid_config.html" class="child"> Configuring strand-grid</strand-list-item>
+				<strand-list-item id="grid_data_integration" value="article_grid_data_integration.html" class="child"> Data Integration with strand-grid</strand-list-item>
+				<strand-list-item id="grid_custom_grid_item" value="article_grid_custom_grid_item.html" class="child"> Creating Custom Grid Items</strand-list-item>
+				<strand-list-item id="migration_guide" value="article_migration_guide.html">Migration Guide</strand-list-item>
+				<strand-list-item id="repeater" value="article_repeater.html">Using strand-repeater</strand-list-item>
+			</strand-docs-nav>
+			<strand-docs-nav id="componentsNav">
+				<strand-header size="medium">Components</strand-header>
+				<strand-list-item id="strand-action" value="strand-action.html">strand-action</strand-list-item>
+				<strand-list-item id="strand-ajax" value="strand-ajax.html">strand-ajax</strand-list-item>
+				<strand-list-item id="strand-autocomplete" value="strand-autocomplete.html">strand-autocomplete</strand-list-item>
+				<strand-list-item id="strand-box" value="strand-box.html">strand-box</strand-list-item>
+				<strand-list-item id="strand-button" value="strand-button.html">strand-button</strand-list-item>
+				<strand-list-item id="strand-calendar" value="strand-calendar.html">strand-calendar</strand-list-item>
+				<strand-list-item id="strand-checkbox" value="strand-checkbox.html">strand-checkbox</strand-list-item>
+				<strand-list-item id="strand-collection" value="strand-collection.html">strand-collection</strand-list-item>
+				<strand-list-item id="strand-datepicker" value="strand-datepicker.html">strand-datepicker</strand-list-item>
+				<strand-list-item id="strand-dialog" value="strand-dialog.html">strand-dialog</strand-list-item>
+				<strand-list-item id="strand-drawer" value="strand-drawer.html">strand-drawer</strand-list-item>
+				<strand-list-item id="strand-dropdown" value="strand-dropdown.html">strand-dropdown</strand-list-item>
+				<strand-list-item id="strand-file-upload" value="strand-file-upload.html">strand-file-upload</strand-list-item>
+				<strand-list-item id="strand-footer" value="strand-footer.html">strand-footer</strand-list-item>
+				<strand-list-item id="strand-form" value="strand-form.html">strand-form</strand-list-item>
+				<strand-list-item id="strand-grid-column" value="strand-grid-column.html">strand-grid-column</strand-list-item>
+				<strand-list-item id="strand-grid-item" value="strand-grid-item.html">strand-grid-item</strand-list-item>
+				<strand-list-item id="strand-grid" value="strand-grid.html">strand-grid</strand-list-item>
+				<strand-list-item id="strand-group" value="strand-group.html">strand-group</strand-list-item>
+				<strand-list-item id="strand-guide" value="strand-guide.html">strand-guide</strand-list-item>
+				<strand-list-item id="strand-header" value="strand-header.html">strand-header</strand-list-item>
+				<strand-list-item id="strand-icon" value="strand-icon.html">strand-icon</strand-list-item>
+				<strand-list-item id="strand-inline-box" value="strand-inline-box.html">strand-inline-box</strand-list-item>
+				<strand-list-item id="strand-input-mask" value="strand-input-mask.html">strand-input-mask</strand-list-item>
+				<strand-list-item id="strand-input" value="strand-input.html">strand-input</strand-list-item>
+				<strand-list-item id="strand-list-item" value="strand-list-item.html">strand-list-item</strand-list-item>
+				<strand-list-item id="strand-loader" value="strand-loader.html">strand-loader</strand-list-item>
+				<strand-list-item id="strand-localstore" value="strand-localstore.html">strand-localstore</strand-list-item>
+				<strand-list-item id="strand-menu" value="strand-menu.html">strand-menu</strand-list-item>
+				<strand-list-item id="strand-modal" value="strand-modal.html">strand-modal</strand-list-item>
+				<strand-list-item id="strand-model" value="strand-model.html">strand-model</strand-list-item>
+				<strand-list-item id="strand-popover" value="strand-popover.html">strand-popover</strand-list-item>
+				<strand-list-item id="strand-progress-bar" value="strand-progress-bar.html">strand-progress-bar</strand-list-item>
+				<strand-list-item id="strand-pulldown-button" value="strand-pulldown-button.html">strand-pulldown-button</strand-list-item>
+				<strand-list-item id="strand-radio" value="strand-radio.html">strand-radio</strand-list-item>
+				<strand-list-item id="strand-repeater" value="strand-repeater.html">strand-repeater</strand-list-item>
+				<strand-list-item id="strand-scroll-panel" value="strand-scroll-panel.html">strand-scroll-panel</strand-list-item>
+				<strand-list-item id="strand-spinner" value="strand-spinner.html">strand-spinner</strand-list-item>
+				<strand-list-item id="strand-sync" value="strand-sync.html">strand-sync</strand-list-item>
+				<strand-list-item id="strand-tab" value="strand-tab.html">strand-tab</strand-list-item>
+				<strand-list-item id="strand-tabs" value="strand-tabs.html">strand-tabs</strand-list-item>
+				<strand-list-item id="strand-textarea" value="strand-textarea.html">strand-textarea</strand-list-item>
+				<strand-list-item id="strand-tooltip" value="strand-tooltip.html">strand-tooltip</strand-list-item>
+			</strand-docs-nav>
+			<div class="docs-logo">
+				<a class="strand-logo">
+					<img src="images/strand-logo.svg" />
+				</a>
+				<p class="mini-subhead version">v4.0.0</p>
+			</div>			<footer class="layout-footer">
+				<div class="docs-footer">
+					<div class="footer-logo-box">
+						<div class="powered-by">
+							<p class="mini-subhead">Powered By</p>
+							<a href="https://developer.mediamath.com/" target="_blank" class="powered-logo"></a>
+						</div>
+						<div class="mediamath">
+							<a href="http://mediamath.com/" target="_blank" class="mediamath-logo"></a>
+						</div>
+					</div>
+					<p class="license">&copy;2015 Strand Authors. Code licensed under the <a href="LICENSE.txt" target="_blank">BSD License</a>. Documentation licensed under <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p>
+				</div>
+			</footer>			<article class="layout-article">
+				<div class="docs-content article">
+					<h1 id="configuring-strand-grid">Configuring strand-grid</h1>
+<h2 id="overview">Overview</h2>
+<p><code>strand-grid</code> has a small set of configuration settings that are required in order to get it up and running. In order to create a basic grid we will first create an <code>&lt;strand-grid&gt;</code> custom element. On its own the grid cannot do much. We need to define what fields of our dataset that we want to display. We achieve this by adding <code>&lt;strand-grid-column&gt;</code> elements to our grid.</p>
+<h3 id="strand-grid-column">strand-grid-column</h3>
+<p><code>&lt;strand-grid-column&gt;</code> has an attribute <code>field</code> which maps to the fields or &quot;keys&quot; in our data objects. Defining a grid-column also has the benefit of rendering a human readable title into the header of our grid. This is achieved by adding a column title to the HTML content or &quot;label&quot; attribute of a grid-column.</p>
+<p>Let&#39;s imagine a dataset of users that has the fields &quot;first_name&quot;, &quot;last_name&quot;, and &quot;email&quot;. We would define our grid like so:</p>
+<pre><code class="lang-html">    &lt;strand-grid&gt;
+        &lt;strand-grid-column field=&quot;first_name&quot;&gt;First Name&lt;/strand-grid-column&gt;
+        &lt;strand-grid-column field=&quot;last_name&quot;&gt;Last Name&lt;/strand-grid-column&gt;
+        &lt;strand-grid-column field=&quot;email&quot;&gt;Email&lt;/strand-grid-column&gt;
+    &lt;/strand-grid&gt;
+</code></pre>
+<p>For multi-line headers you can either add <code>&lt;br/&gt;</code> tags to the HTML content or <code>\n</code> newline characters to the <code>label</code> attribute like this:</p>
+<pre><code class="lang-html">    &lt;strand-grid&gt;
+        &lt;strand-grid-column field=&quot;first_name&quot;&gt;First&lt;br/&gt;Name&lt;/strand-grid-column&gt;
+        &lt;strand-grid-column field=&quot;last_name&quot; label=&quot;Last\nName&quot;&gt;&lt;/strand-grid-column&gt;
+    &lt;/strand-grid&gt;
+</code></pre>
+<p>This is one of the most basic forms of the grid we can generate. However, it is not hooked up to any data source - which we will cover in another tutorial.</p>
+<h2 id="configuration-continued">Configuration Continued</h2>
+<h3 id="strand-grid-attributes">strand-grid Attributes</h3>
+<p>The grid has some other settings that make it really easy to get up and running with some common use-cases.</p>
+<p>A common case we encounter with grids is being able to select a range of items within the grid. <code>strand-grid</code> makes this extremely simple - by adding a <code>selectable</code> boolean flag to your grid like so:</p>
+<pre><code class="lang-html">    &lt;strand-grid selectable&gt;&lt;/strand-grid&gt;
+</code></pre>
+<p>This will enable a <code>&lt;strand-checkbox&gt;</code> on all grid-items. As you select items in the grid, the <code>selected</code> field on the grid will be populated with an up to date array of selected data objects. For example:</p>
+<pre><code class="lang-javascript">    document.querySelector(&quot;strand-grid&quot;).selected = [...];
+</code></pre>
+<p>In much the same way, grid has an <code>expandable</code> flag. This will enable a clickable &quot;carat&quot; on all grid-items that will toggle an &quot;expanded&quot; flag on each data object. This can be used to show/hide more detailed information related to each grid-item.</p>
+<pre><code class="lang-html">    &lt;strand-grid expandable&gt;&lt;/strand-grid&gt;
+</code></pre>
+<h3 id="strand-grid-column-attributes">strand-grid-column Attributes</h3>
+<p><code>strand-grid-column</code> has a number of additional attributes to configure built-in functionality. </p>
+<h4 id="width">Width</h4>
+<p>The <code>width</code> attribute accepts a string which defines the width of a column. Use this to define a column with a fluid width percentage or fixed width in pixels.</p>
+<pre><code class="lang-html">    &lt;strand-grid-column width=&quot;20%&quot;&gt;&lt;/strand-grid-column&gt;
+    &lt;strand-grid-column width=&quot;200px&quot;&gt;&lt;/strand-grid-column&gt;
+</code></pre>
+<h4 id="align">Align</h4>
+<p>The <code>align</code> attribute will align the contents of the column header and the column data. Valid values are &quot;left&quot; or &quot;right&quot; (defaults to &quot;left&quot;).</p>
+<h4 id="resize">Resize</h4>
+<p>The <code>resize</code> flag will enable the resize functionality of a grid-column. This will activate a draggable area on the right side of the column header. (Note - currently fluid width columns will be converted to fixed width upon resizing)</p>
+<h4 id="sort">Sort</h4>
+<p>The <code>sort</code> flag enables the firing of &quot;column-sort&quot; events. It works in tandem with the <code>field</code> and <code>sort-field</code> attributes to enable the sorting of data by higher-level components and functions. More about this in the data integration walkthrough.</p>
+<h2 id="advanced-configuration">Advanced Configuration</h2>
+<h3 id="viewport-width">Viewport Width</h3>
+<p>For grids that need to expand beyond the bounds of their containers / window, there is an attribute called <code>viewport-width</code>. This attribute takes a fixed width number in pixels, which will set its internal container width respectively.</p>
+<pre><code class="lang-html">    &lt;strand-grid viewport-width=&quot;1500&quot;&gt;&lt;/strand-grid&gt;
+</code></pre>
+<h4 id="continue-reading-8594-data-integration-with-strand-grid-article_grid_data_integration-html-">Continue Reading &#8594; <a href="article_grid_data_integration.html">Data Integration with strand-grid</a></h4>
+
+				</div>
+				<div class="layout-push"></div>
+			</article>
+		</strand-docs-shell>
+		<script>
+			var name = "",
+				articlesNav,
+				componentsNav,
+				docsShell,
+				navItems; 
+
+			window.addEventListener('WebComponentsReady', function() {
+				initDoc();
+			});
+
+			function initDoc() {
+				articlesNav 	= Polymer.dom(document).querySelector("#articlesNav");
+				componentsNav 	= Polymer.dom(document).querySelector("#componentsNav");
+				docsShell 		= Polymer.dom(document).querySelector("#docsShell");
+				navItems 		= Polymer.dom(document).querySelectorAll("strand-list-item");
+
+				// default expanded:
+				articlesNav.expanded = true;
+				componentsNav.expanded = false;
+
+				hljs.initHighlighting();
+
+				Array.prototype.slice.call(navItems).forEach(function(item) {
+					if (item.id === name) {
+						item.selected = true;
+						return;
+					}
+				});
+
+				docsShell.addEventListener("docs-nav-selected", navigateToPage);
+			}
+
+			function navigateToPage(e) {
+				window.location = e.detail.value;
+			}
+		</script>
+	</body>
+</html>

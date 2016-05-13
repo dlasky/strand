@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta charset="utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="HandheldFriendly" content="True"/>
+		<meta name="MobileOptimized" content="320"/>
+		<meta name="theme-color" content="#000000"/>
+		<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1"/>
+		<title>Strand Web Components</title>
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		<link rel="apple-touch-icon" href="apple-iphone-icon@2x.png" sizes="120x120" type="image/png" />
+		<link rel="apple-touch-icon" href="apple-ipad-icon@2x.png" sizes="152x152" type="image/png" />
+		<script language="javascript" src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+		<link rel="stylesheet" type="text/css" href="docs.css"/>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
+		<link rel="import" href="bower_components/strand/dist/strand.html"/>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.min.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/mode-html.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/theme-chrome.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/worker-html.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+	</head>
+	<body unresolved>
+		<strand-docs-shell id="docsShell" version="4.0.0" mobileHeader="Strand Docs">
+			<strand-docs-nav id="articlesNav">
+				<strand-header size="medium">Articles</strand-header>
+				<strand-list-item id="getting_started" value="article_getting_started.html">Getting Started</strand-list-item>
+				<strand-list-item id="data_comps_intro" value="article_data_comps_intro.html">Introduction to Data Components</strand-list-item>
+				<strand-list-item id="data_comps_using_ajax" value="article_data_comps_using_ajax.html" class="child"> Using strand-ajax</strand-list-item>
+				<strand-list-item id="data_comps_using_sync" value="article_data_comps_using_sync.html" class="child"> Using strand-sync</strand-list-item>
+				<strand-list-item id="grid_intro" value="article_grid_intro.html">Introduction to strand-grid</strand-list-item>
+				<strand-list-item id="grid_config" value="article_grid_config.html" class="child"> Configuring strand-grid</strand-list-item>
+				<strand-list-item id="grid_data_integration" value="article_grid_data_integration.html" class="child"> Data Integration with strand-grid</strand-list-item>
+				<strand-list-item id="grid_custom_grid_item" value="article_grid_custom_grid_item.html" class="child"> Creating Custom Grid Items</strand-list-item>
+				<strand-list-item id="migration_guide" value="article_migration_guide.html">Migration Guide</strand-list-item>
+				<strand-list-item id="repeater" value="article_repeater.html">Using strand-repeater</strand-list-item>
+			</strand-docs-nav>
+			<strand-docs-nav id="componentsNav">
+				<strand-header size="medium">Components</strand-header>
+				<strand-list-item id="strand-action" value="strand-action.html">strand-action</strand-list-item>
+				<strand-list-item id="strand-ajax" value="strand-ajax.html">strand-ajax</strand-list-item>
+				<strand-list-item id="strand-autocomplete" value="strand-autocomplete.html">strand-autocomplete</strand-list-item>
+				<strand-list-item id="strand-box" value="strand-box.html">strand-box</strand-list-item>
+				<strand-list-item id="strand-button" value="strand-button.html">strand-button</strand-list-item>
+				<strand-list-item id="strand-calendar" value="strand-calendar.html">strand-calendar</strand-list-item>
+				<strand-list-item id="strand-checkbox" value="strand-checkbox.html">strand-checkbox</strand-list-item>
+				<strand-list-item id="strand-collection" value="strand-collection.html">strand-collection</strand-list-item>
+				<strand-list-item id="strand-datepicker" value="strand-datepicker.html">strand-datepicker</strand-list-item>
+				<strand-list-item id="strand-dialog" value="strand-dialog.html">strand-dialog</strand-list-item>
+				<strand-list-item id="strand-drawer" value="strand-drawer.html">strand-drawer</strand-list-item>
+				<strand-list-item id="strand-dropdown" value="strand-dropdown.html">strand-dropdown</strand-list-item>
+				<strand-list-item id="strand-file-upload" value="strand-file-upload.html">strand-file-upload</strand-list-item>
+				<strand-list-item id="strand-footer" value="strand-footer.html">strand-footer</strand-list-item>
+				<strand-list-item id="strand-form" value="strand-form.html">strand-form</strand-list-item>
+				<strand-list-item id="strand-grid-column" value="strand-grid-column.html">strand-grid-column</strand-list-item>
+				<strand-list-item id="strand-grid-item" value="strand-grid-item.html">strand-grid-item</strand-list-item>
+				<strand-list-item id="strand-grid" value="strand-grid.html">strand-grid</strand-list-item>
+				<strand-list-item id="strand-group" value="strand-group.html">strand-group</strand-list-item>
+				<strand-list-item id="strand-guide" value="strand-guide.html">strand-guide</strand-list-item>
+				<strand-list-item id="strand-header" value="strand-header.html">strand-header</strand-list-item>
+				<strand-list-item id="strand-icon" value="strand-icon.html">strand-icon</strand-list-item>
+				<strand-list-item id="strand-inline-box" value="strand-inline-box.html">strand-inline-box</strand-list-item>
+				<strand-list-item id="strand-input-mask" value="strand-input-mask.html">strand-input-mask</strand-list-item>
+				<strand-list-item id="strand-input" value="strand-input.html">strand-input</strand-list-item>
+				<strand-list-item id="strand-list-item" value="strand-list-item.html">strand-list-item</strand-list-item>
+				<strand-list-item id="strand-loader" value="strand-loader.html">strand-loader</strand-list-item>
+				<strand-list-item id="strand-localstore" value="strand-localstore.html">strand-localstore</strand-list-item>
+				<strand-list-item id="strand-menu" value="strand-menu.html">strand-menu</strand-list-item>
+				<strand-list-item id="strand-modal" value="strand-modal.html">strand-modal</strand-list-item>
+				<strand-list-item id="strand-model" value="strand-model.html">strand-model</strand-list-item>
+				<strand-list-item id="strand-popover" value="strand-popover.html">strand-popover</strand-list-item>
+				<strand-list-item id="strand-progress-bar" value="strand-progress-bar.html">strand-progress-bar</strand-list-item>
+				<strand-list-item id="strand-pulldown-button" value="strand-pulldown-button.html">strand-pulldown-button</strand-list-item>
+				<strand-list-item id="strand-radio" value="strand-radio.html">strand-radio</strand-list-item>
+				<strand-list-item id="strand-repeater" value="strand-repeater.html">strand-repeater</strand-list-item>
+				<strand-list-item id="strand-scroll-panel" value="strand-scroll-panel.html">strand-scroll-panel</strand-list-item>
+				<strand-list-item id="strand-spinner" value="strand-spinner.html">strand-spinner</strand-list-item>
+				<strand-list-item id="strand-sync" value="strand-sync.html">strand-sync</strand-list-item>
+				<strand-list-item id="strand-tab" value="strand-tab.html">strand-tab</strand-list-item>
+				<strand-list-item id="strand-tabs" value="strand-tabs.html">strand-tabs</strand-list-item>
+				<strand-list-item id="strand-textarea" value="strand-textarea.html">strand-textarea</strand-list-item>
+				<strand-list-item id="strand-tooltip" value="strand-tooltip.html">strand-tooltip</strand-list-item>
+			</strand-docs-nav>
+			<div class="docs-logo">
+				<a class="strand-logo">
+					<img src="images/strand-logo.svg" />
+				</a>
+				<p class="mini-subhead version">v4.0.0</p>
+			</div>			<footer class="layout-footer">
+				<div class="docs-footer">
+					<div class="footer-logo-box">
+						<div class="powered-by">
+							<p class="mini-subhead">Powered By</p>
+							<a href="https://developer.mediamath.com/" target="_blank" class="powered-logo"></a>
+						</div>
+						<div class="mediamath">
+							<a href="http://mediamath.com/" target="_blank" class="mediamath-logo"></a>
+						</div>
+					</div>
+					<p class="license">&copy;2015 Strand Authors. Code licensed under the <a href="LICENSE.txt" target="_blank">BSD License</a>. Documentation licensed under <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p>
+				</div>
+			</footer>			<article class="layout-article">
+				<div class="docs-content article">
+					<h1 id="getting-started">Getting Started</h1>
+<p>The Strand Web Components library is built on Google&#39;s <a href="https://www.polymer-project.org" target="_blank">Polymer</a>. If you&#39;re unfamiliar, get started by reading the Polymer <a href="https://www.polymer-project.org/1.0/docs/devguide/feature-overview.html" target="_blank">API developer guide</a>. The Strand documentation does not attempt to duplicate information which can be found in the Polymer documentation (e.g. component life cycle, etc.). To get started using Strand Web Components in your project, follow the steps below:</p>
+<h2 id="latest-version">Latest Version</h2>
+<p>Install the latest version of Strand Web Components.</p>
+<pre><code>$ bower install strand
+</code></pre><p>Add the <a href="http://webcomponents.org/polyfills/" target= "_blank">webcomponentsjs</a> polyfills and the Strand library to your <code>head</code> tag. </p>
+<pre><code class="lang-html">&lt;script language=&quot;javascript&quot; src=&quot;bower_components/webcomponentsjs/webcomponents-lite.min.js&quot;&gt;&lt;/script&gt;
+&lt;link rel=&quot;import&quot; href=&quot;bower_components/strand/dist/strand.html&quot;/&gt;
+</code></pre>
+<p>Start adding web component tags to your markup or template wherever you would like the component to render (see the specific details for each component). Here&#39;s how you would add a strand-button:</p>
+<pre><code class="lang-html">&lt;strand-button id=&quot;coolBtn&quot;&gt;
+    &lt;label&gt;Hi There&lt;/label&gt;
+&lt;/strand-button&gt;
+</code></pre>
+<p>To add an event trigger for when all Polymer elements on the page have been upgraded and are ready to use, try the following:</p>
+<pre><code class="lang-javascript">window.addEventListener(&quot;WebComponentsReady&quot;, function() { 
+    // Your web components are ready!
+    // Do whatever you need to do here.
+    var coolBtn = document.querySelector(&quot;#coolBtn&quot;);
+
+    coolBtn.addEventListener(&quot;click&quot;, function(e) {
+        console.log(&quot;coolBtn clicked!&quot;);
+    });
+});
+</code></pre>
+<h2 id="migrating-to-polymer-1-0">Migrating to Polymer 1.0</h2>
+<p>Strand is now built on <a href="https://www.polymer-project.org/1.0/docs/">Polymer 1.0</a>. For details on breaking changes to the Strand APIs, see our <a href="article_migration_guide.html">Migration guide</a>. For breaking changes between the 0.5 and 1.0 release of Polymer, see the <a href="https://www.polymer-project.org/1.0/docs/migration.html">Polymer migration guide</a>.</p>
+<h2 id="specific-version">Specific Version</h2>
+<p>For production applications, we&#39;d recommend using a fixed version of the Strand library.</p>
+<pre><code>$ bower install strand#&lt;version&gt;
+</code></pre>
+				</div>
+				<div class="layout-push"></div>
+			</article>
+		</strand-docs-shell>
+		<script>
+			var name = "",
+				articlesNav,
+				componentsNav,
+				docsShell,
+				navItems; 
+
+			window.addEventListener('WebComponentsReady', function() {
+				initDoc();
+			});
+
+			function initDoc() {
+				articlesNav 	= Polymer.dom(document).querySelector("#articlesNav");
+				componentsNav 	= Polymer.dom(document).querySelector("#componentsNav");
+				docsShell 		= Polymer.dom(document).querySelector("#docsShell");
+				navItems 		= Polymer.dom(document).querySelectorAll("strand-list-item");
+
+				// default expanded:
+				articlesNav.expanded = true;
+				componentsNav.expanded = false;
+
+				hljs.initHighlighting();
+
+				Array.prototype.slice.call(navItems).forEach(function(item) {
+					if (item.id === name) {
+						item.selected = true;
+						return;
+					}
+				});
+
+				docsShell.addEventListener("docs-nav-selected", navigateToPage);
+			}
+
+			function navigateToPage(e) {
+				window.location = e.detail.value;
+			}
+		</script>
+	</body>
+</html>
