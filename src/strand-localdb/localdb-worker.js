@@ -1,4 +1,12 @@
 
+var _handleUpgrade = function(e) {
+			console.log(e);
+			this._db = e.target.result;
+			var objectStore = this._db.createObjectStore(this.entity, { keyPath:this.keyPath });
+			objectStore.createIndex(this.keyPath, this.keyPath, { unique: false });
+			objectStore.createIndex('name', 'name', { unique: false });
+};
+
 var _promFactory = function(item) {
 	if (item instanceof Promise) return item;
 	return new Promise(function(resolve, reject) {
