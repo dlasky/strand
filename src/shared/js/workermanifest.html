@@ -1,0 +1,47 @@
+<script>
+(function (scope) {
+	function ManifestPackage(manifest) {
+		this.manifest = manifest;
+		this.deps = [];
+		this.rendered = null;
+	}
+	ManifestPackage.prototype = {
+		appendClass: function(obj) {
+			var src = this.manifest.getClass(obj);
+			if (src) {
+				this.deps.push(src);
+			}
+			return this;
+		},
+		appendScript: function(src) {
+			this.deps.push(src);
+			return this;
+		},
+		render: function() {
+			console.log(this.deps);
+			this.rendered = URL.createObjectURL( new Blob(this.deps, { type: 'application/javascript' } ) );
+			return this.rendered;
+		}
+	};
+
+	function WorkerManifest() {
+		this.caches = new Map();
+	}
+	WorkerManifest.prototype = {
+		addClass: function(obj, name) {
+			console.log(obj);
+			var src = document.currentScript.innerText;
+			src = src.replace(/.*\.WorkerManifest.addClass\(.*\)/ig, '');
+			src = src.replace(/window\./ig,'self.');
+			this.caches.set(obj, src);
+		},
+		getClass: function(obj, name) {
+			return this.caches.get(obj);
+		},
+		getPackage: function() {
+			return new ManifestPackage(this);
+		}
+	};
+	 scope.WorkerManifest = new WorkerManifest();
+})(window.StrandLib = window.StrandLib || {});
+</script>

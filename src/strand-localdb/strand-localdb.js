@@ -59,13 +59,25 @@
 			}
 		},
 
+		created: function() {
+
+		},
+
 		ready:function() {
 			var openRequest = indexedDB.open(this.dbName, _version);
 			this._promFactory(openRequest).then(this._handleSuccess.bind(this), this._handleError.bind(this));
 			this.listen(openRequest, 'upgradeneeded', '_handleUpgrade');
 			this.listen(openRequest, 'versionchange', '_handleVersion');
 
-			this._worker = new Worker('localdb-worker.js');
+			// this._worker = new Worker('localdb-worker.js');
+
+			var w = StrandLib.WorkerManifest.getPackage()
+			.appendClass(StrandLib.Request)
+			.appendClass(StrandLib.Ajax)
+			.appendClass('worker')
+			.render();
+			this._worker = new Worker(w);
+
 			this.listen(this._worker, 'message', '_handleMessage');
 		},
 

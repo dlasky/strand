@@ -1,3 +1,4 @@
+<link rel="import" href="workermanifest.html"/>
 <link rel="import" href="es6-promise.html"/>
 <link rel="import" href="datautils.html"/>
 <link rel="import" href="eventdispatcher.html"/>
@@ -204,6 +205,7 @@
 	EventDispatcher.prototype.apply(Request.prototype);
 
 	scope.Request = Request;
+	scope.WorkerManifest.addClass(scope.Request);
 }(window.StrandLib = window.StrandLib || {}));
 
 </script>

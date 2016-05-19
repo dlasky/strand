@@ -1,3 +1,4 @@
+<link rel="import" href="workermanifest.html">
 <link rel="import" href="behaviorutils.html"/>
 <link rel="import" href="datautils.html"/>
 <link rel="import" href="request.html"/>
@@ -281,12 +282,13 @@
 
 	Ajax.getBehavior = function() {
 		return beh;
-	}
+	};
 
 	EventDispatcher.prototype.apply(Ajax.prototype);
 
 	scope.Ajax = Ajax;
 
-})(window.StrandLib = window.StrandLib || {});
+	scope.WorkerManifest.addClass(scope.Ajax);
 
+})(window.StrandLib = window.StrandLib || {});
 </script>

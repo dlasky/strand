@@ -1,13 +1,13 @@
 
-var _handleUpgrade = function(e) {
+function _handleUpgrade(e) {
 			console.log(e);
 			this._db = e.target.result;
 			var objectStore = this._db.createObjectStore(this.entity, { keyPath:this.keyPath });
 			objectStore.createIndex(this.keyPath, this.keyPath, { unique: false });
 			objectStore.createIndex('name', 'name', { unique: false });
-};
+}
 
-var _promFactory = function(item) {
+function _promFactory(item) {
 	if (item instanceof Promise) return item;
 	return new Promise(function(resolve, reject) {
 		item.onsuccess = function(e) {
@@ -15,9 +15,9 @@ var _promFactory = function(item) {
 		};
 		item.onerror = reject;
 	});
-};
+}
 
-var _objFactory = function(db, mode, operation, storeName) {
+function _objFactory(db, mode, operation, storeName) {
 	mode = mode || 'readwrite';
 	operation = operation || function(store) { return store.get(); };
 	storeName = storeName || 'entity';
@@ -36,9 +36,9 @@ var _objFactory = function(db, mode, operation, storeName) {
 		transaction: transaction,
 		promise: prom
 	};
-};
+}
 
-var _cursorFactory = function(store, conditionCallback) {
+function _cursorFactory(store, conditionCallback) {
 	//rewrite this to not return the promise maybe?
 	conditionCallback = conditionCallback || function(o) { return true; };
 	return new Promise(function(resolve, reject) {
@@ -55,9 +55,9 @@ var _cursorFactory = function(store, conditionCallback) {
 		};
 		c.onerror = reject;
 	});
-};
+}
 
-var all = function(db) {
+function all(db) {
 	var o = [];
 	return this._objFactory(db, 'readonly', function(store) {
 		if (store.getAll) {
@@ -66,9 +66,9 @@ var all = function(db) {
 			return this._cursorFactory(store);
 		}
 	}.bind(this)).promise;
-};
+}
 
-var add =function(db, data, entity) {
+function add(db, data, entity) {
 	var req = this._objFactory(db, 'readwrite', function(store) {
 		if (Array.isArray(data)) {
 			return data.map(function(obj) {
@@ -79,10 +79,57 @@ var add =function(db, data, entity) {
 		}
 	}.bind(this), entity);
 	return req.promise;
-};
+}
+
+function update(data, key, entity, updateCallback) {
+	updateCallback = updateCallback || function(result, data) {
+		return DataUtils.copy({}, result, data);
+	};
+	if (key) {
+		return this.query(key, entity).then(function(result) {
+			var dt = updateCallback(result, data);
+			return this._objFactory('readwrite', function(store) {
+				return store.put(dt);
+			}).promise;
+		}.bind(this));
+	}
+	return this._objFactory('readwrite', function(store) {
+		return store.put(data);
+	}).promise;
+}
+
+function remove(key) {
+	if (DataUtils.isType(key, "object")) {
+		key = key[this.keyPath];
+	}
+	var req = this._objFactory('readwrite', function(store) {
+		return store.delete(key);
+	});
+	return req.promise;
+}
+
+function query(key, entity) {
+	if (DataUtils.isType(key, "object")) {
+		key = key[this.keyPath];
+	}
+	return this._objFactory('readonly', function(store) {
+		return store.get(key);
+	}, entity).promise;
+}
+
+function count() {
+	return _objFactory('readonly', function(store) {
+		var idx = store.index('id');
+		return idx.count();
+	}).promise;
+}
+
+function deleteDB() {
+	return this._promFactory(indexedDB.deleteDatabase(this.dbName));
+}
 
 /** DEBUG ONLY **/
-var test = function(db) {
+function test(db) {
 	function b(a){return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b);}
 	for(var i=0;i<70000;i++) {
 		if (i%100===0)
@@ -90,7 +137,7 @@ var test = function(db) {
 		add(db, {name:b(),id:i});
 	}
 	console.log('done');
-};
+}
 
 var store = [];
 var db;
@@ -116,3 +163,5 @@ this.addEventListener('message', function(e) {
 		break;
 	}
 });
+
+StrandLib.WorkerManifest.addClass('worker');
