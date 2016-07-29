@@ -8,6 +8,7 @@
 <link rel="import" href="../shared/fonts/fonts.html"/>
 <link rel="import" href="../shared/js/colors.html"/>
 <link rel="import" href="../shared/behaviors/refable.html"/>
+<link rel="import" href="../shared/behaviors/lightdomgettable.html"/>
 <link rel="import" href="../shared/behaviors/validatable.html"/>
 <link rel="import" href="../strand-inline-box/strand-inline-box.html"/>
 
@@ -15,7 +16,7 @@
 	<link rel="import" type="css" href="strand-validator.css"/>
 	<template>
 		<content select="*"></content>
-		<template is="dom-if" if="{{message}}">
+		<template is="dom-if" if="{{error}}">
 			<strand-inline-box type="error">{{message}}</strand-inline-box>
 		</template>
 	</template>

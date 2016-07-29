@@ -12,20 +12,26 @@
 		behaviors: [
 			StrandTraits.Refable,
 			StrandTraits.Validatable,
-			StrandTraits.DomGettable
+			StrandTraits.LightDomGettable
 		],
+
+		listeners: {
+			'changed':'_test'
+		},
 
 		properties: {
 			message:{
 				type:String,
-				value:""
+				value:"This field contains a validation error"
 			},
 			whitespace:{
 				type:String,
 				value:"",
 				reflectToAttribute:true
 			}
-		}
+		},
+
+		_test: function() { console.log('value changed',this.value)}
 
 	});
 
