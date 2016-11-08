@@ -18,6 +18,7 @@
 <link rel="import" href="../shared/behaviors/stackable.html">
 <link rel="import" href="../shared/behaviors/stylable.html"/>
 <link rel="import" href="../shared/behaviors/resolvable.html"/>
+<link rel="import" href="../shared/behaviors/mixinfindable.html"/>
 <link rel="import" href="../strand-item-recycler/strand-item-recycler.html">
 <link rel="import" href="../strand-icon/strand-icon.html"/>
 <link rel="import" href="../strand-list-item/strand-list-item.html"/>
@@ -53,16 +54,17 @@
 						data="{{data}}"
 						hidden$="{{!_hideInsertionPoints(data, data.length)}}"
 						scope="{{ref}}"
+						mixin-findable="{{mixinFindable}}"
 						index="{{index}}">
 						<template preserve-content>
 							<strand-list-item
-								value$="{{model.value}}"
+								value$="{{_propAs(model, scope.valueAs, model.*)}}"
 								_keyselectable
 								selected$="{{model.selected}}"
 								highlighted$="{{model.highlighted}}"
 								show-placeholder="{{!model}}">
 								<strand-highlight 
-									text="{{model.name}}" 
+									text="{{_propAs(model, scope.nameAs, model.*)}}" 
 									highlight="{{scope.highlight}}">
 								</strand-highlight>
 							</strand-list-item>

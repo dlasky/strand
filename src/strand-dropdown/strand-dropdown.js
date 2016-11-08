@@ -91,6 +91,16 @@
 				notify: true,
 				observer: '_valueChanged'
 			},
+			valueAs: {
+				type:String,
+				notify: true,
+				value:"value"
+			},
+			nameAs: {
+				type:String,
+				notify: true,
+				value:"name"
+			},
 			highlight:{
 				type:String,
 				notify:true,
@@ -111,6 +121,7 @@
 			StrandTraits.Jqueryable,
 			StrandTraits.AutoTogglable,
 			StrandTraits.PositionableDropdown,
+			StrandTraits.MixinFindable,
 			StrandTraits.Refable
 		],
 
@@ -217,8 +228,8 @@
 
 		_getDataItemByValue: function(value) {
 			return this.data.filter(function(item) {
-				return item.name === value || item.value.toString() === value;
-			})[0];
+				return item[this.nameAs] === value || item[this.valueAs].toString() === value;
+			},this)[0];
 		},
 
 		// Data handling
@@ -291,8 +302,8 @@
 		_selectedIndexChanged: function(newIndex, oldIndex) {
 			if (typeof newIndex === 'number') {
 				var newSelected = this.items[newIndex];
-				var value = newSelected.value ? newSelected.value.toString() : newSelected.textContent.trim();
-				var name = newSelected.name ? newSelected.name : newSelected.textContent.trim();
+				var value = newSelected[this.valueAs] ? newSelected[this.valueAs].toString() : newSelected.textContent.trim();
+				var name = newSelected[this.nameAs] ? newSelected[this.nameAs] : newSelected.textContent.trim();
 
 				this.value = value;
 				this.error = false;
@@ -330,7 +341,7 @@
 				}
 			}
 
-			if (this.state === this.STATE_OPENED) this.close();
+			// if (this.state === this.STATE_OPENED) this.close();
 		},
 
 		_highlightedIndexChanged: function(newIndex, oldIndex) {
@@ -425,6 +436,16 @@
 			o.top = (direction === 'n');
 			o.bottom = (direction === 's');
 			return this.classBlock(o);
+		},
+
+		mixinsForValue: function (value) {
+			return {
+				_propAs: function(model, propAs, changes) {
+					if (model)
+						return model[propAs];
+					return null;
+				}
+			};
 		},
 
 		requestInitialization: function () {
