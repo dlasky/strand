@@ -5,6 +5,7 @@
 
 -->
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="style.html"/>
 <link rel="import" href="../shared/fonts/fonts.html"/>
 <link rel="import" href="../shared/js/colors.html"/>
 <link rel="import" href="../strand-icon/strand-icon.html"/>
@@ -14,12 +15,12 @@
 <link rel="import" href="../shared/behaviors/refable.html"/>
 
 <dom-module id="strand-button">
-	<link rel="import" type="css" href="strand-button.css"/>
 	<template>
+	<style include="strand-button-style"></style>
 		<div class$="{{ updateClass(fitparent, error, type) }}">
-			<content select="strand-icon" id="icon"></content>
-			<content select="strand-spinner" id="spinner"></content>
-			<content select="label"></content>
+			<slot name="icon" id="icon"></slot>
+			<slot name="spinner" id="spinner"></slot>
+			<slot name="label"></slot>
 		</div>
 	</template>
 </dom-module>
