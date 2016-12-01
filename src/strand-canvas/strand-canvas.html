@@ -1,2 +1,12 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../shared/fonts/fonts.html"/>
+<link rel="import" href="../shared/behaviors/refable.html"/>
+<link rel="import" href="../shared/behaviors/stylable.html"/>
+
 <dom-module id="strand-canvas">
+	<link rel="import" type="css" href="strand-canvas.css"/>
+	<template>
+		<canvas id="canvas" width="{{width}}" height="{{height}}">{{fallback}}</canvas>
+	</template>
 </dom-module>
+<script src="strand-canvas.js"></script>
