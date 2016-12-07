@@ -91,6 +91,30 @@
 			return this;
 		},
 
+		toCanvas: function(ctx) {
+			ctx.beginPath();
+			ctx.moveTo(this.top, this.left);
+			ctx.lineTo(this.top, this.right);
+			ctx.lineTo(this.bottom, this.right);
+			ctx.lineTo(this.bottom, this.left);
+			ctx.lineTo(this.top, this.left);
+			ctx.stroke();
+		},
+
+		toCanvasRounded: function(context, radius) {
+			context.beginPath();
+			context.moveTo(this.x+radius, this.top);
+			context.lineTo(this.right-radius, this.top);
+			context.quadraticCurveTo(this.right, this.top, this.right, this.top+radius);
+			context.lineTo(this.right, this.bottom-radius);
+			context.quadraticCurveTo(this.right, this.bottom, this.right-radius, this.bottom);
+			context.lineTo(this.left+radius, this.bottom);
+			context.quadraticCurveTo(this.left, this.bottom, this.left, this.bottom-radius);
+			context.lineTo(this.left, this.top+radius);
+			context.quadraticCurveTo(this.left, this.top, this.left+radius, this.top);
+			context.stroke();
+		},
+
 		positionRelative : function(other, mask) {
 			var r = Rectangle.SIDE;
 			(r.LEFT & mask) && (this.right = other.left);
