@@ -5,13 +5,14 @@
 
 -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="style.html"/>
 <link rel="import" href="../shared/behaviors/resolvable.html"/>
 <link rel="import" href="../shared/behaviors/stylable.html"/>
 <link rel="import" href="../shared/behaviors/refable.html"/>
 
 <dom-module id="strand-spinner">
-	<link rel="import" type="css" href="strand-spinner.css"/>
 	<template>
+		<style include="strand-spinner-style"></style>
 		<canvas id="spinner" style$="{{spinnerAnimation}}" width$="{{diameter}}" height$="{{diameter}}"></canvas>
 	</template>
 </dom-module>

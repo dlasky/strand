@@ -39,7 +39,8 @@
 }
 
 @mixin buttonFont() {
-	@include defaultFont(13px, 29px, 700, normal);
+	@include defaultFont(13px, 28px, 700, normal);
+	margin-top: 1px; // make it APPEAR visually centered
 }
 
 // defaults to antialiased

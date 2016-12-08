@@ -126,25 +126,25 @@
 		<div class="col c1">
 			<p><span class="bold">Button:</span> Primary with icon</p>
 			<strand-button unresolved>
-				<strand-icon type="plus" width="12" height="12" unresolved></strand-icon>
+				<strand-icon slot="icon" type="plus" width="12" height="12" unresolved></strand-icon>
 				<label slot="label">button title here</label>
 			</strand-button>
 			<hr/>
 			<p><span class="bold">Button:</span> Primary with spinner</p>
 			<strand-button unresolved>
-				<strand-spinner fill-color="#003C71"></strand-spinner>
+				<strand-spinner slot="spinner" fill-color="#003C71"></strand-spinner>
 				<label slot="label">button title here</label>
 			</strand-button>
 			<hr/>
 			<p><span class="bold">Button:</span> Primary with icon disabled</p>
 			<strand-button disabled="true" unresolved>
-				<strand-icon type="plus" width="12" height="12" unresolved></strand-icon>
+				<strand-icon slot="icon" type="plus" width="12" height="12" unresolved></strand-icon>
 				<label slot="label">button title here</label>
 			</strand-button>
 			<hr/>
 			<p><span class="bold">Button:</span> Primary with icon and fit to parent</p>
 			<strand-button fitparent="true" unresolved>
-				<strand-icon type="plus" width="12" height="12" unresolved></strand-icon>
+				<strand-icon slot="icon" type="plus" width="12" height="12" unresolved></strand-icon>
 				<label slot="label">button title here</label>
 			</strand-button>
 			<hr/>
@@ -153,20 +153,25 @@
 		<div class="col c1">
 			<p><span class="bold">Button:</span> Secondary with icon</p>
 			<strand-button type="secondary" unresolved>
-				<strand-icon type="delete" width="12" height="12"></strand-icon>
+				<strand-icon slot="icon" type="delete" width="12" height="12"></strand-icon>
 				<label slot="label">button title here</label>
 			</strand-button>
 			<hr/>
 			<p><span class="bold">Button:</span> Secondary with icon disabled</p>
 			<strand-button type="secondary" disabled>
-				<strand-icon type="delete" width="12" height="12" unresolved></strand-icon>
+				<strand-icon slot="icon" type="delete" width="12" height="12" unresolved></strand-icon>
 				<label slot="label">button title here</label>
 			</strand-button>
 			<hr/>
 			<p><span class="bold">Button:</span> Secondary with icon fit to parent</p>
 			<strand-button type="secondary" fitparent unresolved>
-				<strand-icon type="delete" width="12" height="12" unresolved></strand-icon>
+				<strand-icon slot="icon" type="delete" width="12" height="12" unresolved></strand-icon>
 				<label slot="label">button title here</label>
+			</strand-button>
+			<hr/>
+			<p><span class="bold">Button:</span> Secondary with icon only</p>
+			<strand-button type="secondary" unresolved>
+				<strand-icon slot="icon" type="download" width="12" height="12" unresolved></strand-icon>
 			</strand-button>
 			<hr/>
 		</div>

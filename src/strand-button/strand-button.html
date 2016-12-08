@@ -16,11 +16,11 @@
 
 <dom-module id="strand-button">
 	<template>
-	<style include="strand-button-style"></style>
+		<style include="strand-button-style"></style>
 		<div class$="{{ updateClass(fitparent, error, type) }}">
-			<slot name="icon" id="icon"></slot>
-			<slot name="spinner" id="spinner"></slot>
-			<slot name="label"></slot>
+			<slot id="iconSlotincl" name="icon" id="icon"></slot>
+			<slot id="spinnerSlot" name="spinner" id="spinner"></slot>
+			<slot id="labelSlot" name="label"></slot>
 		</div>
 	</template>
 </dom-module>

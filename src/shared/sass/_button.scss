@@ -22,20 +22,25 @@
 	height: 29px !important;
 	width: auto;
 
-	& > ::content label {
+	& ::slotted(label) {
 		@include buttonFont();
 		pointer-events: none;
 		white-space: nowrap;
 	}
 
-	& > ::content strand-icon {
+	& ::slotted(strand-icon) {
 		display: block;
 		pointer-events: none;
 	}
 
-	& > ::content strand-icon + label,
-	& > ::content strand-spinner + label {
-		padding-left: 7px;
+	& ::slotted(strand-icon),
+	& ::slotted(strand-spinner) {
+		padding-right: 7px;
+	}
+
+	& ::slotted(strand-icon:last-child),
+	& ::slotted(strand-spinner:last-child){
+		padding-right: 0;
 	}
 
 	&:focus {
