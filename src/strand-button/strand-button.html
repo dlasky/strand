@@ -18,9 +18,9 @@
 	<template>
 		<style include="strand-button-style"></style>
 		<div class$="{{ updateClass(fitparent, error, type) }}">
-			<slot id="iconSlotincl" name="icon" id="icon"></slot>
-			<slot id="spinnerSlot" name="spinner" id="spinner"></slot>
-			<slot id="labelSlot" name="label"></slot>
+			<slot name="icon"></slot>
+			<slot name="spinner"></slot>
+			<slot name="label"></slot>
 		</div>
 	</template>
 </dom-module>
