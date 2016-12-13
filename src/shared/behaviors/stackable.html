@@ -56,7 +56,8 @@
 		properties: {
 			_stackHost: {
 				type: Object,
-				value: function() { return this; }
+				value: null,
+				observer: "_stackHostChanged"
 			},
 			_stackTarget: {
 				type: Object,
@@ -77,50 +78,48 @@
 			}
 		},
 
-		_initialized: false,
-
 		attached: function() {
-			_addInstance(this._stackHost, this._stackTarget, this.stackType);
-			// We don't want to trigger a stack update when properties
-			// are processed - initialized flag:
-			this._initialized = true;
+			if (!this._stackHost) this._stackHost = this;
 		},
 
 		detached: function() {
 			_removeInstance(this._stackHost, this._stackTarget, this.stackType);
 		},
 
+		_stackHostChanged: function(newVal, oldVal) {
+			if (newVal) this.debounce('updateStack', this._updateStack);
+		},
+
 		_stackTargetChanged: function(newVal, oldVal) {
-			if (newVal) this._updateStack();
+			if (newVal) this.debounce('updateStack', this._updateStack);
 		},
 
-		_updateDepth: function() {
-			if (this._stackTarget) {
+		_updateDepth: function(newVal, oldVal) {
+			var target = this._stackTarget ? this._stackTarget : this._stackHost;
+			if (target) {
 				this._stackTarget.style.setProperty("z-index", this.depth);
-			} else {
-				this._stackHost.style.setProperty("z-index", this.depth);
 			}
-			// console.log("this.depth: ", this.depth);
 		},
 
-		_updateType: function(newVal, oldVal) {
-			if (newVal) this._updateStack(newVal, oldVal);
+		_updateType: function(newType, oldType) {
+			if (newType) this._updateStack(newType, oldType);
 		},
 
 		moveToTop: function() {
-			this._updateStack();
+			this.debounce('updateStack', this._updateStack);
 			return this.depth;
 		},
 
 		_updateStack: function(newType, oldType) {
-			if (this._initialized) {
+			var target = this._stackTarget ? this._stackTarget : this._stackHost;
+			if (target) {
 				var newStackType = !newType ? this.stackType : newType,
 					oldStackType = !oldType ? null : oldType;
 
 				_removeInstance(this._stackHost, this._stackTarget, newStackType, oldStackType);
 				_addInstance(this._stackHost, this._stackTarget, newStackType);
 			}
-		},
+		}
 	};
 
 })(window.StrandTraits = window.StrandTraits || {}); 

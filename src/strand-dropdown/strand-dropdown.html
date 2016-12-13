@@ -5,6 +5,7 @@
 
 -->
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="style.html"/>
 <link rel="import" href="../shared/fonts/fonts.html"/>
 <link rel="import" href="../shared/js/colors.html"/>
 <link rel="import" href="../shared/js/rectangle.html">
@@ -18,15 +19,15 @@
 <link rel="import" href="../shared/behaviors/stackable.html">
 <link rel="import" href="../shared/behaviors/stylable.html"/>
 <link rel="import" href="../shared/behaviors/resolvable.html"/>
-<link rel="import" href="../strand-item-recycler/strand-item-recycler.html">
+<!-- <link rel="import" href="../strand-item-recycler/strand-item-recycler.html"> -->
 <link rel="import" href="../strand-icon/strand-icon.html"/>
 <link rel="import" href="../strand-list-item/strand-list-item.html"/>
 <link rel="import" href="../strand-highlight/strand-highlight.html"/>
 <link rel="import" href="../shared/behaviors/refable.html"/>
 
 <dom-module id="strand-dropdown">
-	<link href="strand-dropdown.css" rel="import" type="css"/>
 	<template>
+		<style include="strand-dropdown-style"></style>
 		<div
 			id="target"
 			class$="{{_updateButtonClass(_placement, fitparent, error, state, _type)}}"
@@ -45,9 +46,21 @@
 		</div>
 		<div id="panel" on-tap="_updateSelectedItem">
 			<div id="container" class$="{{_containerClass(state, _placement)}}">
+				
+				<!-- 
 				<content hidden$="{{_hideInsertionPoints(data, data.length)}}" id="search" select="strand-input"></content>
+ 				-->
+
+ 				<slot hidden$="{{_hideInsertionPoints(data, data.length)}}" id="search" name="search" on-slotchange="_searchSlotChange"></slot>
+
 				<div id="list">
+
+					<!--
 					<content hidden$="{{_hideInsertionPoints(data, data.length)}}" id="content" select="strand-list-item"></content>
+					-->
+					<slot hidden$="{{_hideInsertionPoints(data, data.length)}}" id="content"></slot>
+
+					<!--
 					<strand-item-recycler
 						id="itemRecycler"
 						data="{{data}}"
@@ -70,6 +83,7 @@
 							</strand-list-item>
 						</template>
 					</strand-item-recycler>
+					-->
 				</div>
 			</div>
 		</div>

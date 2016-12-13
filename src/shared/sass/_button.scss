@@ -178,7 +178,7 @@
 		height: 46px !important;
 		padding: 0 15px;
 
-		& > ::content label {
+		& ::slotted(label) {
 			font-size: 15px !important;
 			line-height: 46px !important;
 		}
@@ -190,7 +190,7 @@
 		height: 29px !important;
 		padding: 0 10px;
 
-		& > ::content label {
+		&::slotted(label) {
 			@include buttonFont();
 		}
 	}
@@ -201,8 +201,8 @@
 		height: 26px !important;
 		padding: 0 8px !important;
 
-		& > ::content label {
-			font-size: 11px!important;
+		& ::slotted(label) {
+			font-size: 11px !important;
 			line-height: 26px !important;
 		}
 	}

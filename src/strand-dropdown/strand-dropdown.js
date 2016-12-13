@@ -16,23 +16,23 @@
 		properties: {
 			_scope: {
 				type: Object,
-				value: function() { return this; }
+				value: null
 			},
 			_panel: {
 				type: Object,
-				value: function() { return this.$.panel; }
+				value: null
 			},
 			_itemRecycler: {
 				type: Object,
-				value: function() { return this.$.itemRecycler; }
+				value: null
 			},
 			_target: {
 				type: Object,
-				value: function() { return this.$.target; }
+				value: null
 			},
 			_stackTarget: {
 				type: Object,
-				value: function() { return this.$.panel; }
+				value: null
 			},
 			_type: {
 				type: String,
@@ -99,6 +99,7 @@
 			},
 			maxItems: {
 				type: Number,
+				value: 10,
 				observer: '_maxItemsChanged'
 			},
 			updateSelection:{
@@ -134,18 +135,15 @@
 			this.initialValue = this.hasAttribute('value');
 		},
 
-		ready: function() {
-			if(!this.toggleTrigger) {
-				this.toggleTrigger = this.target;
-			}
+		attached: function() {
+			this._panel = this.$.panel;
+			// this._itemRecycler = this.$.itemRecycler;
+			this._target = this.$.target;
+			this._stackTarget = this.$.panel;
+		},
 
-			this.async(function() {
-				// set input layout default - is there an input?
-				var search = this.querySelector('strand-input');
-				if (search) {
-					search.layout = this.LAYOUT_TYPE;
-				}
-			});
+		_searchSlotChange: function(e) {
+			this.querySelector('strand-input').layout = this.LAYOUT_TYPE;
 		},
 
 		open: function(silent) {
@@ -228,18 +226,14 @@
 		// Data handling
 		_dataChanged: function(newData, oldData) {
 			if (newData) {
-				if (!this.maxItems) {
-					this.maxItems = 10;
-				}
 				// reset selectedIndex for recycler scenarios
 				if (this.updateSelection) {
 					this.selectedIndex = null;
 				} else {
 					this.reset();
 				}
-				this._setMaxHeight(this.maxItems);
 			} else {
-				//reset the GUI selection state but leave 'value' alone
+				// reset the GUI selection state but leave 'value' alone
 				this.selectedIndex = null;
 			}
 		},
@@ -347,15 +341,21 @@
 				if (this.data) {
 					this.set('data.' + newIndex + '.highlighted', true);
 				} else {
-					this.attributeFollows('highlighted', this.items[newIndex], this.items[oldIndex]);
-					if(this.items[newIndex]) this.items[newIndex].setAttribute('_keyselectable', true);
+					var item = this.items[newIndex];
+					if (item) {
+						item.setAttribute('highlighted', true);
+						item.setAttribute('_keyselectable', true);
+					}
 				}
 			}
 			if (typeof oldIndex === 'number' && oldIndex >=0) {
 				if (this.data) {
 					this.set('data.' + oldIndex + '.highlighted', false);
 				} else {
-					this.items[oldIndex].removeAttribute('highlighted');
+					var item = this.items[oldIndex];
+					if (item) {
+						item.removeAttribute('highlighted');
+					}
 				}
 			}
 			inherited.apply(this, [newIndex, oldIndex]);

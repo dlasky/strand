@@ -5,6 +5,7 @@
 
 -->
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="style.html"/>
 <link rel="import" href="../shared/fonts/fonts.html"/>
 <link rel="import" href="../shared/js/colors.html"/>
 <link rel="import" href="../strand-icon/strand-icon.html"/>
@@ -15,8 +16,8 @@
 <link rel="import" href="../shared/behaviors/refable.html"/>
 
 <dom-module id="strand-input">
-	<link rel="import" type="css" href="strand-input.css"/>
 	<template>
+		<style include="strand-input-style"></style>
 		<input 
 			id="input"
 			type="{{type}}" 

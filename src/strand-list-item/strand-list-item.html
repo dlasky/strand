@@ -5,6 +5,7 @@
 
 -->
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="style.html"/>
 <link rel="import" href="../shared/fonts/fonts.html"/>
 <link rel="import" href="../shared/js/measure.html"/>
 <link rel="import" href="../shared/behaviors/resolvable.html"/>
@@ -12,9 +13,9 @@
 <link rel="import" href="../shared/behaviors/refable.html"/>
 
 <dom-module id="strand-list-item">
-	<link rel="import" type="css" href="strand-list-item.css"/>
 	<template>
-		<content id="content"></content>
+		<style include="strand-list-item-style"></style>
+		<slot id="content"></slot>
 		<template is="dom-if" if="{{showPlaceholder}}">
 			<span class="fake-content" style$="width:[[randomWidth]];">&nbsp;</span>
 		</template>
