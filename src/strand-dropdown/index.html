@@ -4,8 +4,8 @@
 		<script language="javascript" src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 		<script>
 			// window.Polymer = window.Polymer || {};
-		    // window.Polymer.dom = 'shadow';
-	    </script>
+			// window.Polymer.dom = 'shadow';
+		</script>
 		<link rel="import" href="../strand-list-item/strand-list-item.html">
 		<link rel="import" href="../strand-input/strand-input.html">
 		<link rel="import" href="../strand-spinner/strand-spinner.html">
@@ -72,10 +72,10 @@
 			hr {
 				border: 0;
 				display: block;
-			    border-bottom: 1px solid #fff;
-			    border-top: 1px solid #ccc;
-			    height: 0px;
-			    margin-top: 20px;
+				border-bottom: 1px solid #fff;
+				border-top: 1px solid #ccc;
+				height: 0px;
+				margin-top: 20px;
 			}
 
 			.vr {
@@ -111,7 +111,7 @@
 			-->
 			<p><span class="bold">Dropdown:</span> Label wider than list options with search added</p>
 			<strand-dropdown placeholder="Some Longer Label" value="0" max-items="7" unresolved>
-				<strand-input slot="search" search="true" clear="true" placeholder="Search" unresolved></strand-input>
+				<strand-input slot="search" search="true" clear="true" placeholder="Search"></strand-input>
 				<strand-list-item value="0" unresolved>strand-list-item 01</strand-list-item>
 				<strand-list-item value="1" unresolved>strand-list-item 02</strand-list-item>
 				<strand-list-item value="2" unresolved>strand-list-item 03</strand-list-item>
@@ -346,24 +346,24 @@
 				// dataTest.value = dataTestHidden.value = 1;
 
 				// init jQuery test:
-				// $d = $("#dynamic");
-				// addListItems(50);
-				// $d[0].value = 3;
+				$d = $("#dynamic");
+				addListItems(50);
+				$d[0].value = 3;
 
-				// // hidden at first test:
-				// ddlHide = document.querySelector("#ddlHide");
-				// setTimeout(function() {
-				// 	ddlHide.style.display = 'block';
-				// }, 3000);
+				// hidden at first test:
+				ddlHide = document.querySelector("#ddlHide");
+				setTimeout(function() {
+					ddlHide.style.display = 'block';
+				}, 3000);
 
-				// // log selected:
-				// document.addEventListener("selected", function (e) {
-				// 	console.log(e.detail);
-				// });
+				// log selected:
+				document.addEventListener("selected", function (e) {
+					console.log(e.detail);
+				});
 
-				// document.addEventListener("changed", function (e) {
-				// 	console.log(e.detail);
-				// });
+				document.addEventListener("changed", function (e) {
+					console.log(e.detail);
+				});
 			});
 
 			// jQuery test (add & remove - jqueryable behavior):

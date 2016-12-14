@@ -28,13 +28,14 @@
 <dom-module id="strand-dropdown">
 	<template>
 		<style include="strand-dropdown-style"></style>
+
 		<div
 			id="target"
 			class$="{{_updateButtonClass(_placement, fitparent, error, state, _type)}}"
 			tabindex="0"
 			title$="{{_updateTitle(selectedIndex)}}">
 			<span class="left-items">
-				<content select="strand-icon" id="icon"></content>
+				<slot name="strand-icon" id="icon"></slot>
 				<label id="label">{{_updateLabelText(selectedIndex, placeholder)}}</label>
 			</span>
 			<template is="dom-if" if="{{!isLoading}}">
@@ -44,14 +45,16 @@
 				<strand-spinner id="spinner" fill-color="#333333" radius="8"></strand-spinner>
 			</template>
 		</div>
+
 		<div id="panel" on-tap="_updateSelectedItem">
+
 			<div id="container" class$="{{_containerClass(state, _placement)}}">
 				
 				<!-- 
 				<content hidden$="{{_hideInsertionPoints(data, data.length)}}" id="search" select="strand-input"></content>
  				-->
 
- 				<slot hidden$="{{_hideInsertionPoints(data, data.length)}}" id="search" name="search" on-slotchange="_searchSlotChange"></slot>
+ 				<slot id="search" name="search"></slot>
 
 				<div id="list">
 

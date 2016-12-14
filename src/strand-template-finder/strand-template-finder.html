@@ -5,19 +5,18 @@
 
 -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="style.html"/>
 <link rel="import" href="../shared/behaviors/templatefindable.html"/>
 <link rel="import" href="../shared/behaviors/dommutable.html"/>
 <link rel="import" href="../shared/behaviors/refable.html"/>
 
 <dom-module id="strand-template-finder">
-	<link rel="import" type="css" href="strand-template-finder.css"/>
 	<template>
+		<style include="strand-template-finder-style"></style>
 		<noscript id="concealer" hidden>
-			<content id="content"></content>
+			<slot name="template" id="content"></slot>
 		</noscript>
 	</template>
 </dom-module>
 
 <script src="strand-template-finder.js"></script>
-
-

@@ -4,43 +4,54 @@
  * This code may only be used under the BSD style license found at http://mediamath.github.io/strand/LICENSE.txt
 
 -->
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../shared/js/recycler.html"/>
-<link rel="import" href="../shared/js/continuum.html"/>
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="style.html"/>
+
 <link rel="import" href="../shared/behaviors/resolvable.html"/>
-<link rel="import" href="../shared/behaviors/mixinfindable.html"/>
-<link rel="import" href="../shared/behaviors/templatefindable.html"/>
-<link rel="import" href="../shared/behaviors/templatecomponentizable.html"/>
-<link rel="import" href="../shared/behaviors/sizeresponsible.html"/>
-<link rel="import" href="../shared/behaviors/windownotifier.html"/>
-<link rel="import" href="../shared/behaviors/poolusable.html"/>
-<link rel="import" href="../strand-template-finder/strand-template-finder.html"/>
 <link rel="import" href="../shared/behaviors/refable.html"/>
+<link rel="import" href="../shared/behaviors/windownotifier.html"/>
+
+<!-- <link rel="import" href="../shared/js/recycler.html"/> -->
+<!-- <link rel="import" href="../shared/js/continuum.html"/> -->
+<!-- <link rel="import" href="../shared/behaviors/mixinfindable.html"/> -->
+<!-- <link rel="import" href="../shared/behaviors/templatefindable.html"/> -->
+<!-- <link rel="import" href="../shared/behaviors/templatecomponentizable.html"/> -->
+<!-- <link rel="import" href="../shared/behaviors/sizeresponsible.html"/> -->
+<!-- <link rel="import" href="../shared/behaviors/poolusable.html"/> -->
+<!-- <link rel="import" href="../strand-template-finder/strand-template-finder.html"/> -->
+
 
 <dom-module id="strand-item-recycler">
-	<link rel="import" type="css" href="strand-item-recycler.css"/>
 	<template>
+		<style include="strand-item-recycler-style"></style>
+		
+		<slot id="temp" name="temp" on-slotchange="_tempSlotChange"></slot>
+
+		<!-- 
 		<strand-template-finder template-finder="{{templateFinder}}" template-findable="{{templateFindable}}">
-			<content select="template:not([is])"></content>
+			
 		</strand-template-finder>
+		-->
 
 		<div id="pane">
 			<div id="quad"></div>
 			<div id="constrainer">
 				<div id="middle"></div>
 				<div id="header">
-					<content select="[recycler=header]"></content>
+					<!-- <slot name="header" on-slotchange="_slotChanged"></slot> -->
 				</div>
 				<div id="footer">
-					<content select="[recycler=footer]"></content>
+					<!-- <slot name="footer" on-slotchange="_slotChanged"></slot> -->
 				</div>
 			</div>
 		</div>
+
 		<div id="overlay">
 			<div id="fixes-flicker">
-				<content select="[recycler=overlay]"></content>
+				<!-- <slot name="overlay" on-slotchange="_slotChanged"></content> -->
 			</div>
 		</div>
+
 	</template>
 </dom-module>
 

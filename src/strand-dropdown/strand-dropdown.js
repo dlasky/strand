@@ -127,6 +127,8 @@
 			"itemRecycler.measuring-changed": "_checkSizing",
 		},
 
+		_searchSlot: null,
+		_boundSearchSlotHandler: null,
 		_widthLocked: false,
 		LAYOUT_TYPE: 'dropdown',
 
@@ -140,10 +142,32 @@
 			// this._itemRecycler = this.$.itemRecycler;
 			this._target = this.$.target;
 			this._stackTarget = this.$.panel;
+
+			// ensure layout attribute on search field... this is stupid but no other way to
+			// add layout attribute, cause 'slotchange' isn't supposed to fire when an instance is initialized
+			// ...but apparantly DOES when the lightDOM is another WC (but not div, etc)
+			this._searchSlot = this._searchSlot || this.shadowRoot.querySelector('#search');
+			this._boundSearchSlotHandler = this._searchSlotChange.bind(this);
+			this._searchSlot.addEventListener('slotchange', this._boundSearchSlotHandler);
+
+			Polymer.RenderStatus.afterNextRender(this, function() {
+		    	this._searchSlotChange();
+			});
+		},
+
+		detached: function() {
+			if (this._searchSlot && this._boundSearchSlotHandler) {
+				this._searchSlot.removeEventListener('slotchange', this._boundSearchSlotHandler);
+			}
 		},
 
 		_searchSlotChange: function(e) {
-			this.querySelector('strand-input').layout = this.LAYOUT_TYPE;
+			if (e) console.log('_searchSlotChange: ', e);
+
+			// ensure we don't double set the layout due to slotchange getting caught
+			var searchLightDOM = this._searchSlot.assignedNodes();
+			if (searchLightDOM.length && !searchLightDOM[0].layout) searchLightDOM[0].layout = this.LAYOUT_TYPE;
+			// this.querySelector('strand-input').layout = this.LAYOUT_TYPE;
 		},
 
 		open: function(silent) {

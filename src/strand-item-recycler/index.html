@@ -1,67 +1,86 @@
 <!DOCTYPE html>
 <html>
-  <head>
-	<script language="javascript" src="../../bower_components/webcomponentsjs/webcomponents.js"></script>
-	<link rel="import" href="../strand-input/strand-input.html">
-	<link rel="import" href="../strand-dropdown/strand-dropdown.html">
-	<link rel="import" href="strand-item-recycler.html">
-	<style type="text/css">
-		html, body {
-			padding: 0;
-			margin: 0;
-			background: #eee;
-		}
+	<head>
+		<script language="javascript" src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+		<script>
+				// window.Polymer = window.Polymer || {};
+				// window.Polymer.dom = 'shadow';
+			</script>
+		<link rel="import" href="../strand-input/strand-input.html">
+		<link rel="import" href="strand-item-recycler.html">
+			<style type="text/css">
+			html, body {
+				padding: 0;
+				margin: 0;
+				background: #eee;
+			}
 
-		strand-item-recycler[unresolved] {
-			display: none;
-		}
+			strand-item-recycler[unresolved] {
+				/*display: none;*/
+			}
 
-		strand-item-recycler {
-			height: 500px;
-			/*padding-top: 30px;*/
-		}
+			strand-item-recycler {
+				height: 500px;
+				/*padding-top: 30px;*/
+			}
 
-		._mm_item {
-			background: #fff;
-			border-bottom: 1px solid #ccc;
-			padding: 10px;
-		}
+			._mm_item {
+				background: #fff;
+				border-bottom: 1px solid #ccc;
+				padding: 10px;
+			}
 
-		#header {
-			/*position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			height: 30px;*/
-			background: #ccc;
-		}
+			#header {
+				/*position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 30px;*/
+				background: #ccc;
+			}
 
-		#footer {
-			background: #ccc;
-		}
+			#footer {
+				background: #ccc;
+			}
+		</style>
+	</head>
+	<body>
 
-	</style>
-  </head>
-  <body>
+	<strand-item-recycler id="itemRecycler">
+
+		<!-- <div slot="header">Header<br/>Text</div> -->
+
+		<!-- <div slot="footer">Footer<br/>Text<br/>Too</div> -->
+
+		<div slot="temp">Ducks</div>
+
+		<!-- 
+		<template slot="aaa111">
+			<div class="_mm_item" data-id="{{model.id}}" style$="{{model.style}}">
+				<span>{{model.num}}</span><strand-input value="{{model.name}}"></strand-input>
+			</div>
+		</template>
+		 -->
+	</strand-item-recycler>
+
+	<!-- 
 	<button id="switch">toggle</button>
-	<div id="toggle" style="display: notnone">
+	<div id="toggle">	
 		<strand-item-recycler id="itemRecycler" template-uri="./template.html" unresolved>
 			<div id="header" recycler="header">Header <br/> Text</div>
 			<div id="footer" recycler="footer">Footer <br/> Text <br/> Too</div>
 			Hello World
 		</strand-item-recycler>
-
 		<strand-item-recycler id="itemRecycler2" unresolved>
 			<div id="header" recycler="header">Header <br/> Text</div>
 			<div id="footer" recycler="footer">Footer <br/> Text <br/> Too</div>
 			Hello World
-			<template>
+			<template slot="aaa111">
 				<div class="_mm_item" data-id="{{model.id}}" style$="{{model.style}}">
 					<span>{{model.num}}</span><strand-input value="{{model.name}}"></strand-input>
 				</div>
 			</template>
 		</strand-item-recycler>
-
 		<strand-item-recycler id="itemRecycler3" template-uri="./template.html" unresolved>
 			<div id="header" recycler="header">Header <br/> Text</div>
 			<div id="footer" recycler="footer">Footer <br/> Text <br/> Too</div>
@@ -73,7 +92,10 @@
 			</template>
 		</strand-item-recycler>
 	</div>
+	 -->
+
 	<script type="text/javascript">
+
 		var data = [],
 			ddDataArr = [],
 			itemRecycler,
@@ -113,51 +135,58 @@
 		}
 
 		window.addEventListener("WebComponentsReady", function() {
-			var all = [
-				document.querySelector("#itemRecycler"),
-				document.querySelector("#itemRecycler2"),
-				document.querySelector("#itemRecycler3"),
-			];
-			toggle = document.querySelector("#toggle");
-			itemRecycler = all[2];
-			(itemRecycler || {}).data = data;
-			itemRecycler = all[1];
-			(itemRecycler || {}).data = data;
-			itemRecycler = all[0];
-			(itemRecycler || {}).data = data;
+			
+			// var all = [
+			// 	document.querySelector("#itemRecycler"),
+			// 	document.querySelector("#itemRecycler2"),
+			// 	document.querySelector("#itemRecycler3"),
+			// ];
+			// toggle = document.querySelector("#toggle");
+			// itemRecycler = all[2];
+			// (itemRecycler || {}).data = data;
+			// itemRecycler = all[1];
+			// (itemRecycler || {}).data = data;
+			// itemRecycler = all[0];
+			// (itemRecycler || {}).data = data;
 
-			document.querySelector("#switch").onclick = function () {
-				if (toggle.style.display !== "none") {
-					toggle.style.display = "none"
-				} else {
-					toggle.style.display = "";
-					all.forEach(function (recycler) {
-						recycler && recycler.initialize();
-					});
-				}
-			};
+			// document.querySelector("#switch").onclick = function () {
+			// 	if (toggle.style.display !== "none") {
+			// 		toggle.style.display = "none"
+			// 	} else {
+			// 		toggle.style.display = "";
+			// 		all.forEach(function (recycler) {
+			// 			recycler && recycler.initialize();
+			// 		});
+			// 	}
+			// };
 
-			setTimeout(function () {
-				//itemRecycler.data = data.slice(data.length >> 2, data.length >> 1);
-			}, 3000);
+			// setTimeout(function () {
+			// 	//itemRecycler.data = data.slice(data.length >> 2, data.length >> 1);
+			// }, 3000);
 
-		// 	setTimeout(function () {
-		// 		itemRecycler.style.height = (2 * itemRecycler.offsetHeight) + "px";
+			// /*
+			// setTimeout(function () {
+			// 	itemRecycler.style.height = (2 * itemRecycler.offsetHeight) + "px";
 
-		// 		(function loop () {
-		// 			var index = 0|(Math.random() * itemRecycler.data.length);
-		// 			var datum = itemRecycler.data[index];
-		// 			if (datum.size === 50) {
-		// 				datum.size = 100;
-		// 				itemRecycler.set("data."+index+".style", "transition: height 2s; height: 100px");
-		// 			} else {
-		// 				datum.size = 50;
-		// 				itemRecycler.set("data."+index+".style", "transition: height 2s; height: 50px");
-		// 			}
-		// 			setTimeout(loop, 1000);
-		// 		});
-		// 	}, 3000);
+			// 	(function loop () {
+			// 		var index = 0|(Math.random() * itemRecycler.data.length);
+			// 		var datum = itemRecycler.data[index];
+			// 		if (datum.size === 50) {
+			// 			datum.size = 100;
+			// 			itemRecycler.set("data."+index+".style", "transition: height 2s; height: 100px");
+			// 		} else {
+			// 			datum.size = 50;
+			// 			itemRecycler.set("data."+index+".style", "transition: height 2s; height: 50px");
+			// 		}
+			// 		setTimeout(loop, 1000);
+			// 	});
+			// }, 3000);
+			// */
+
+			var itemRecycler = document.querySelector('#itemRecycler');
+			itemRecycler.data = data;
+
 		});
 	</script>
-  </body>
+	</body>
 </html>
