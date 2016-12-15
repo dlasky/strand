@@ -38,6 +38,9 @@
 			},
 		},
 
+		_boundTempSlotHandler: null,
+		_finderTemplate: null,
+
 		observers: [
 			"_selectTemplate(templateFindable.templateMatch, templateFindable.templateSelector)",
 			"_startTemplateImport(templateFindable.templateUri)",
@@ -45,12 +48,42 @@
 			"_observeTemplate(templateFindable.templateBind)",
 		],
 
+		created: function() {
+			console.log('strand-template-finder: created');
+		},
+
+		attached: function() {
+			console.log('strand-template-finder: attached');
+		},
+
+		detached: function() {
+			if (this._finderTemplate && this._boundTempSlotHandler) {
+				this._finderTemplate.remoevEventListener('slotchange', this._boundTempSlotHandler);
+			}
+		},
+
 		ready: function () {
-			var finder = this;
-			Polymer.dom(this.$.content).observeNodes(function (info) {
-				var findable = finder.templateFindable;
-				finder._selectTemplate(findable.templateMatch, findable.templateSelector);
+			console.log('strand-template-finder: ready');
+			this._finderTemplate = this.shadowRoot.querySelector('#findertemplate');
+
+			this._boundTempSlotHandler = this._templateSlotChange.bind(this);
+			this._finderTemplate.addEventListener('slotchange', this._boundTempSlotHandler);
+
+			Polymer.RenderStatus.afterNextRender(this, function() {
+		    	this._templateSlotChange();
 			});
+
+			// findertemplate.observeNodes(function (info) {
+			// 	var findable = finder.templateFindable;
+			// 	finder._selectTemplate(findable.templateMatch, findable.templateSelector);
+			// });
+		},
+
+		_templateSlotChange: function(e) {
+			if(e) console.log(e);
+			var finder = this;
+			var findable = finder.templateFindable;
+			finder._selectTemplate(findable.templateMatch, findable.templateSelector);
 		},
 
 		templateInnerHTML: function () {
@@ -84,6 +117,7 @@
 			var element = match && this.queryEffectiveChildren(match) || null;
 			store.lightdom = element && selector && element.querySelector(selector) || element;
 			this._updateTemplate();
+			console.log('strand-template-finder:: _selectTemplate');
 		},
 
 		_startTemplateImport: function () {
@@ -134,6 +168,7 @@
 			this._set_lazyHTML("");
 			this._setTemplate(template);
 			this.notifyPath("templateFinder.template", template);
+			console.log('strand-template-finder:: _updateTemplate: ', template);
 		},
 
 	});

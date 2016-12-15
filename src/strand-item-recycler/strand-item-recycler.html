@@ -11,44 +11,40 @@
 <link rel="import" href="../shared/behaviors/refable.html"/>
 <link rel="import" href="../shared/behaviors/windownotifier.html"/>
 
-<!-- <link rel="import" href="../shared/js/recycler.html"/> -->
-<!-- <link rel="import" href="../shared/js/continuum.html"/> -->
-<!-- <link rel="import" href="../shared/behaviors/mixinfindable.html"/> -->
-<!-- <link rel="import" href="../shared/behaviors/templatefindable.html"/> -->
-<!-- <link rel="import" href="../shared/behaviors/templatecomponentizable.html"/> -->
-<!-- <link rel="import" href="../shared/behaviors/sizeresponsible.html"/> -->
-<!-- <link rel="import" href="../shared/behaviors/poolusable.html"/> -->
-<!-- <link rel="import" href="../strand-template-finder/strand-template-finder.html"/> -->
+<link rel="import" href="../shared/js/recycler.html"/>
+<link rel="import" href="../shared/js/continuum.html"/>
+<link rel="import" href="../shared/behaviors/mixinfindable.html"/>
+<link rel="import" href="../shared/behaviors/templatefindable.html"/>
+<link rel="import" href="../shared/behaviors/templatecomponentizable.html"/>
+<link rel="import" href="../shared/behaviors/sizeresponsible.html"/>
+<link rel="import" href="../shared/behaviors/poolusable.html"/>
+<link rel="import" href="../strand-template-finder/strand-template-finder.html"/>
 
 
 <dom-module id="strand-item-recycler">
 	<template>
 		<style include="strand-item-recycler-style"></style>
-		
-		<slot id="temp" name="temp" on-slotchange="_tempSlotChange"></slot>
-
-		<!-- 
+		 
 		<strand-template-finder template-finder="{{templateFinder}}" template-findable="{{templateFindable}}">
-			
+			<slot id="template" name="template"></slot>
 		</strand-template-finder>
-		-->
 
 		<div id="pane">
 			<div id="quad"></div>
 			<div id="constrainer">
 				<div id="middle"></div>
 				<div id="header">
-					<!-- <slot name="header" on-slotchange="_slotChanged"></slot> -->
+					<slot name="header"></slot>
 				</div>
 				<div id="footer">
-					<!-- <slot name="footer" on-slotchange="_slotChanged"></slot> -->
+					<slot name="footer"></slot>
 				</div>
 			</div>
 		</div>
 
 		<div id="overlay">
 			<div id="fixes-flicker">
-				<!-- <slot name="overlay" on-slotchange="_slotChanged"></content> -->
+				<slot name="overlay"></content>
 			</div>
 		</div>
 
