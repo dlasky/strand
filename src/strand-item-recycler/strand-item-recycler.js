@@ -980,8 +980,7 @@ found here: https://github.com/Polymer/core-list
 			var parent = bound.element;
 			var child = parent.lastChild;
 			if (child) do {
-				if (child.localName === "div" &&
-					/^strand-gen-comp-/.test(child.is)) {
+				if (/^strand-gen-comp-/.test(child.is)) {
 					parent.removeChild(child);
 				}
 			} while (child = child.previousElementSibling)
@@ -1083,11 +1082,15 @@ found here: https://github.com/Polymer/core-list
 
 			this._retrofitBound(bound, limit, young, useLightDom);
 
-			Polymer.dom(bound.element).appendChild(bound.instance);
+			// Polymer.dom(bound.element).appendChild(bound.instance);
+			bound.element.appendChild(bound.instance);
+
 			if (replaced) {
-				Polymer.dom(this.$.middle).insertBefore(bound.element, replaced.element);
+				// Polymer.dom(this.$.middle).insertBefore(bound.element, replaced.element);
+				this.$.middle.insertBefore(bound.element, replaced.element);
 			} else {
-				Polymer.dom(this.$.middle).appendChild(bound.element);
+				// Polymer.dom(this.$.middle).appendChild(bound.element);
+				this.$.middle.appendChild(bound.element);
 			}
 
 			return bound;
@@ -1128,7 +1131,8 @@ found here: https://github.com/Polymer/core-list
 			bound.nthDOM = -1;
 			bound.itemRecycler = null;
 			//this._removeBoundResponse(bound);
-			Polymer.dom(Polymer.dom(bound.element).parentNode).removeChild(bound.element);
+			// Polymer.dom(Polymer.dom(bound.element).parentNode).removeChild(bound.element);
+			bound.element.parentNode.removeChild(bound.element);
 			this._supplyBound(bound);
 
 			binds[count] = null;
@@ -1277,7 +1281,8 @@ found here: https://github.com/Polymer/core-list
 				return this._recycler.getHeightAtIndex.apply(this._recycler, arguments);
 			} else {
 				// especially relevant when measurements are available before mutation observer fires
-				recycled = Polymer.dom(this.$.middle).querySelector(".recycler-panel");
+				// recycled = Polymer.dom(this.$.middle).querySelector(".recycler-panel");
+				recycled = this.$.middle.querySelector(".recycler-panel");
 				return recycled && elementHeight(recycled) || null;
 			}
 		},
@@ -1324,7 +1329,8 @@ found here: https://github.com/Polymer/core-list
 
 			if (bound &&
 				bound.element) {
-				return Polymer.dom(bound.element).querySelector(selector);
+				// return Polymer.dom(bound.element).querySelector(selector);
+				return bound.element.querySelector(selector);
 			} else {
 				return null;
 			}
@@ -1335,7 +1341,8 @@ found here: https://github.com/Polymer/core-list
 
 			if (bound &&
 				bound.element) {
-				return Polymer.dom(bound.element).querySelectorAll(selector);
+				// return Polymer.dom(bound.element).querySelectorAll(selector);
+				return bound.element.querySelectorAll(selector);
 			} else {
 				return null;
 			}
@@ -1353,11 +1360,13 @@ found here: https://github.com/Polymer/core-list
 		},
 
 		querySelectorOfHeader: function (selector) {
-			return Polymer.dom(this.$.header).querySelector(selector);
+			// return Polymer.dom(this.$.header).querySelector(selector);
+			return this.$.header.querySelector(selector);
 		},
 
 		querySelectorAllOfHeader: function (selector) {
-			return Polymer.dom(this.$.header).querySelectorAll(selector);
+			// return Polymer.dom(this.$.header).querySelectorAll(selector);
+			return this.$.header.querySelectorAll(selector);
 		},
 
 		getBoundingClientRectOfHeader: function () {
@@ -1365,11 +1374,13 @@ found here: https://github.com/Polymer/core-list
 		},
 
 		querySelectorOfFooter: function (selector) {
-			return Polymer.dom(this.$.footer).querySelector(selector);
+			// return Polymer.dom(this.$.footer).querySelector(selector);
+			return this.$.footer.querySelector(selector);
 		},
 
 		querySelectorAllOfFooter: function (selector) {
-			return Polymer.dom(this.$.footer).querySelectorAll(selector);
+			// return Polymer.dom(this.$.footer).querySelectorAll(selector);
+			return this.$.footer.querySelectorAll(selector);
 		},
 
 		getBoundingClientRectOfFooter: function () {
