@@ -48,13 +48,13 @@
 			"_observeTemplate(templateFindable.templateBind)",
 		],
 
-		created: function() {
-			console.log('strand-template-finder: created');
-		},
+		// created: function() {
+		// 	console.log('strand-template-finder: created');
+		// },
 
-		attached: function() {
-			console.log('strand-template-finder: attached');
-		},
+		// attached: function() {
+		// 	console.log('strand-template-finder: attached');
+		// },
 
 		detached: function() {
 			if (this._finderTemplate && this._boundTempSlotHandler) {
@@ -63,7 +63,7 @@
 		},
 
 		ready: function () {
-			console.log('strand-template-finder: ready');
+			// console.log('strand-template-finder: ready');
 			this._finderTemplate = this.shadowRoot.querySelector('#findertemplate');
 
 			this._boundTempSlotHandler = this._templateSlotChange.bind(this);
@@ -80,7 +80,7 @@
 		},
 
 		_templateSlotChange: function(e) {
-			if(e) console.log(e);
+			// if(e) console.log(e);
 			var finder = this;
 			var findable = finder.templateFindable;
 			finder._selectTemplate(findable.templateMatch, findable.templateSelector);
@@ -91,7 +91,8 @@
 
 			if (!innerHTML) {
 				if (this.template) {
-					this._set_lazyHTML(Polymer.dom(this.template).innerHTML);
+					// this._set_lazyHTML(Polymer.dom(this.template).innerHTML);
+					this._set_lazyHTML(this.template.innerHTML);
 				}
 			}
 
@@ -117,7 +118,6 @@
 			var element = match && this.queryEffectiveChildren(match) || null;
 			store.lightdom = element && selector && element.querySelector(selector) || element;
 			this._updateTemplate();
-			console.log('strand-template-finder:: _selectTemplate');
 		},
 
 		_startTemplateImport: function () {
@@ -168,7 +168,6 @@
 			this._set_lazyHTML("");
 			this._setTemplate(template);
 			this.notifyPath("templateFinder.template", template);
-			console.log('strand-template-finder:: _updateTemplate: ', template);
 		},
 
 	});

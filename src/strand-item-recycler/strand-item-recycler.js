@@ -271,41 +271,42 @@ found here: https://github.com/Polymer/core-list
 			"_dataSpliced(data.splices)",
 		],
 
-		created: function() {
-			console.log('strand-item-recycler: created');
-		},
+		// created: function() {
+		// 	console.log('strand-item-recycler: created');
+		// },
 
-		attached: function() {
-			console.log('strand-item-recycler: attached');
-		},
+		// attached: function() {
+		// 	console.log('strand-item-recycler: attached');
+		// },
 
-		detached: function() {
-			if (this._templateSlot && this._boundTempSlotHandler) {
-				this._templateSlot.removeEventListener('slotchange', this._boundTempSlotHandler);
-			}
-		},
+		// detached: function() {
+		// 	if (this._templateSlot && this._boundTempSlotHandler) {
+		// 		this._templateSlot.removeEventListener('slotchange', this._boundTempSlotHandler);
+		// 	}
+		// },
 
-		ready: function() {
-			console.log('strand-item-recycler: ready');
-			this._templateSlot = this.shadowRoot.querySelector('#template');
-			this._boundTempSlotHandler = this._templateSlotChange.bind(this);
-			this._templateSlot.addEventListener('slotchange', this._boundTempSlotHandler);
+		// Strategy for notification when slot changes - we don't actually need it now
+		// ready: function() {
+		// 	console.log('strand-item-recycler: ready');
+		// 	this._templateSlot = this.shadowRoot.querySelector('#template');
+		// 	this._boundTempSlotHandler = this._templateSlotChange.bind(this);
+		// 	this._templateSlot.addEventListener('slotchange', this._boundTempSlotHandler);
 
-			Polymer.RenderStatus.afterNextRender(this, function() {
-		    	this._templateSlotChange();
-			});
-		},
+		// 	Polymer.RenderStatus.afterNextRender(this, function() {
+		// 		this._templateSlotChange();
+		// 	});
+		// },
 
-		_templateSlotChange: function(e) {
-			if (e) {
-				console.log('strand-item-recycler: lightDOM was added, \'slotchange\' event: ', e);
-			} else {
-				console.log(
-					'strand-item-recycler: lightDOM was added, but no \'slotchange\' event: ',
-					this._templateSlot.assignedNodes()
-				);
-			}
-		},
+		// _templateSlotChange: function(e) {
+		// 	if (e) {
+		// 		console.log('strand-item-recycler: lightDOM was added, \'slotchange\' event: ', e);
+		// 	} else {
+		// 		console.log(
+		// 			'strand-item-recycler: lightDOM was added, but no \'slotchange\' event: ',
+		// 			this._templateSlot.assignedNodes()
+		// 		);
+		// 	}
+		// },
 
 		_spliceTxn: function (fn, itemRecycler, splices) {
 			var transactor = this;
