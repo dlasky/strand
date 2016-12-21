@@ -139,13 +139,13 @@
 
 		attached: function() {
 			this._panel = this.$.panel;
-			// this._itemRecycler = this.$.itemRecycler;
+			this._itemRecycler = this.$.itemRecycler;
 			this._target = this.$.target;
 			this._stackTarget = this.$.panel;
 
 			// ensure layout attribute on search field... this is stupid but no other way to
 			// add layout attribute, cause 'slotchange' isn't supposed to fire when an instance is initialized
-			// ...but apparantly DOES when the lightDOM is another WC (but not div, etc)
+			// ...but apparantly DOES when the lightDOM is added to another instance
 			this._searchSlot = this._searchSlot || this.shadowRoot.querySelector('#search');
 			this._boundSearchSlotHandler = this._searchSlotChange.bind(this);
 			this._searchSlot.addEventListener('slotchange', this._boundSearchSlotHandler);
@@ -162,16 +162,15 @@
 		},
 
 		_searchSlotChange: function(e) {
-			if (e) console.log('_searchSlotChange: ', e);
-
 			// ensure we don't double set the layout due to slotchange getting caught
 			var searchLightDOM = this._searchSlot.assignedNodes();
-			if (searchLightDOM.length && !searchLightDOM[0].layout) searchLightDOM[0].layout = this.LAYOUT_TYPE;
-			// this.querySelector('strand-input').layout = this.LAYOUT_TYPE;
+			var search = searchLightDOM[0];
+			if (searchLightDOM.length && !search.layout) search.layout = this.LAYOUT_TYPE;
 		},
 
 		open: function(silent) {
 			var inherited = BehaviorUtils.findSuper(StrandTraits.PositionableDropdown, 'open');
+
 			// Ensures that we get a value for the offsetHeight of the distributed list items:
 			if (this.maxItems) this._setMaxHeight(this.maxItems);
 			if (!this._widthLocked) this._lockWidth();
@@ -210,8 +209,17 @@
 		},
 
 		_updateSelectedItem: function(e) {
-			var target = Polymer.dom(e).path[0];
+			// var target = Polymer.dom(e).path[0];
+			var target = null;
+			
+			e.path.some(function(item, index){
+				target = item;
+				var tagName = item.tagName ? item.tagName : null;
+				return tagName && tagName.toLowerCase() === 'strand-list-item';
+			});
+
 			var value = this._getValueFromDom(target).toString();
+			
 			var targetIndex = null;
 
 			if (this.data) {
@@ -254,7 +262,7 @@
 				if (this.updateSelection) {
 					this.selectedIndex = null;
 				} else {
-					this.reset();
+					// this.reset();
 				}
 			} else {
 				// reset the GUI selection state but leave 'value' alone
@@ -307,11 +315,12 @@
 
 		// General
 		_valueChanged: function(newVal, oldVal) {
-			if (newVal) {
-				this._selectItemByValue(newVal);
-			} else {
-				this.reset();
-			}
+			if (newVal) this._selectItemByValue(newVal);
+			// if (newVal) {
+			// 	this._selectItemByValue(newVal);
+			// } else {
+			// 	this.reset();
+			// }
 		},
 
 		_selectedIndexChanged: function(newIndex, oldIndex) {

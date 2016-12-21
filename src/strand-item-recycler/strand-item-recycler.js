@@ -285,7 +285,7 @@ found here: https://github.com/Polymer/core-list
 		// 	}
 		// },
 
-		// Strategy for notification when slot changes - we don't actually need it now
+		// // Strategy for notification when slot changes - we don't actually need it now
 		// ready: function() {
 		// 	console.log('strand-item-recycler: ready');
 		// 	this._templateSlot = this.shadowRoot.querySelector('#template');
@@ -664,6 +664,7 @@ found here: https://github.com/Polymer/core-list
 		},
 
 		_needsInitialization: function (data, _templateFound) {
+			console.log('_needsInitialization:', data, _templateFound);
 			this._initializable = true;
 			this._initialized = false;
 			this.initialize();

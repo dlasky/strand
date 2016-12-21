@@ -30,7 +30,7 @@
 		SHARED: 'shared/',
 		BOWER: 'bower_components/',
 		SASS_INCLUDE: ['bower_components/bourbon/app/assets/stylesheets/', 'src/shared/sass/'],
-		LIVE_PORT: 8000,
+		LIVE_PORT: 9000,
 		DOCS_PORT: 8001,
 		PATCH_LIST: [
 			'bower_components/moment/min/moment.min.js'

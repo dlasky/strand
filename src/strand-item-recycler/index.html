@@ -2,9 +2,11 @@
 <html>
 	<head>
 		<script language="javascript" src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-		<link rel="import" href="../strand-input/strand-input.html">
-		<link rel="import" href="../strand-dropdown/strand-dropdown.html">
-		<link rel="import" href="strand-item-recycler.html">
+		<link rel="import" href="../strand-input/strand-input.html" />
+		<link rel="import" href="../strand-dropdown/strand-dropdown.html" />
+		<link rel="import" href="../strand-list-item/strand-list-item.html" />
+		<link rel="import" href="../strand-highlight/strand-highlight.html" />
+		<link rel="import" href="strand-item-recycler.html" />
 			<style type="text/css">
 			html, body {
 				padding: 0;
@@ -28,7 +30,9 @@
 
 	<div id="toggle">
 
-		<!-- URI import has some issues
+		<!-- as of Polymer 2.0 preview - URI import still has some issues: the original 'onload' event is lost -->
+		<!-- https://github.com/Polymer/polymer/blob/2.0-preview/src/utils/utils.html#L160 -->
+		<!-- 
 		<strand-item-recycler id="itemRecycler" template-uri="template.html" unresolved>
 			<div slot="header" style="font-family: sans-serif; font-size: 13px; background: #ccc; padding:5px;">Header<br/>Text</div>
 			<div slot="footer" style="font-family: sans-serif; font-size: 13px; background: #ccc; padding:5px;">Footer<br/>Text<br/>Too</div>
@@ -36,6 +40,7 @@
 		</strand-item-recycler>
 		-->
 
+		<!--
 		<strand-item-recycler id="itemRecycler2" unresolved>
 			<div slot="header" style="font-family: sans-serif; font-size: 13px; background: #ccc; padding:5px;">Header<br/>Text</div>
 			<div slot="footer" style="font-family: sans-serif; font-size: 13px; background: #ccc; padding:5px;">Footer<br/>Text<br/>Too</div>
@@ -58,6 +63,25 @@
 				</div>
 			</template>
 		</strand-item-recycler>
+		-->
+
+		<strand-item-recycler
+			id="listItemRecycler">
+			<template slot="template">
+				<strand-list-item
+					value$="{{model.value}}"
+					selected$="{{model.selected}}"
+					highlighted$="{{model.highlighted}}"
+					show-placeholder="{{!model}}">
+					<template is="dom-if" if="{{model}}">
+						<strand-highlight 
+							text="{{model.name}}" 
+							highlight="{{scope.highlight}}">
+						</strand-highlight>
+					</template>
+				</strand-list-item>
+			</template>
+		</strand-item-recycler>
 
 	</div>
 	
@@ -66,6 +90,7 @@
 
 		var data = [],
 			ddDataArr = [],
+			listItems = [],
 			itemRecycler,
 			header,
 			mmItemStyleStr = 'font-family: sans-serif; font-size: 13px; background: #fff; border-bottom: 1px solid #ccc; padding: 10px;',
@@ -80,6 +105,10 @@
 				name: "Some Name " + j,
 				value: "String" + j
 			});
+		}
+
+		for (var i=0; i < 100; i++) {
+			listItems.push({ value: String(i), name: "No." + i + " Readable Very Long Name Here" });
 		}
 
 		function generateItem(index) {
@@ -108,6 +137,7 @@
 				document.querySelector("#itemRecycler2"),
 				document.querySelector("#itemRecycler3"),
 			];
+
 			toggle = document.querySelector("#toggle");
 			// itemRecycler = all[0];
 			// (itemRecycler || {}).data = data;
@@ -115,6 +145,9 @@
 			(itemRecycler || {}).data = data;
 			itemRecycler = all[2];
 			(itemRecycler || {}).data = data;
+
+			var listItemRecycler = document.querySelector('#listItemRecycler');
+			listItemRecycler.data = listItems;
 
 			document.querySelector("#switch").onclick = function () {
 				if (toggle.style.display !== "none") {
@@ -126,6 +159,8 @@
 					// });
 				}
 			};
+
+
 
 			// setTimeout(function () {
 			// 	//itemRecycler.data = data.slice(data.length >> 2, data.length >> 1);

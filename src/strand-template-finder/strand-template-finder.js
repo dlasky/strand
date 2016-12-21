@@ -80,7 +80,7 @@
 		},
 
 		_templateSlotChange: function(e) {
-			// if(e) console.log(e);
+			if(e) console.log('strand-template-finder :: _templateSlotChange: ', e);
 			var finder = this;
 			var findable = finder.templateFindable;
 			finder._selectTemplate(findable.templateMatch, findable.templateSelector);
