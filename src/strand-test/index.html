@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="import" href="../../bower_components/polymer/polymer.html"/>
+  <script language="javascript" src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+</head>
+<body>
+  
+  <dom-module id="x-child">
+    <template>
+      <style>
+        :host {
+          display: block;
+          color: #333;
+          font-size: 13px;
+          line-height: 13px;
+          font-family:sans-serif;
+        }
+        div {
+          background: #fff;
+          padding: 10px;
+          border-bottom:#eee 1px solid;
+        }
+        div[selected]{
+          background: #ff0000;
+          color: #fff;          
+        }
+      </style>
+      <div selected$="{{selected}}">{{label}}</div>
+    </template>
+    <script>
+      Polymer({
+        is: 'x-child',
+        properties: {
+          label: {
+            type: String,
+            value: null
+          },
+          selected: {
+            type: Boolean,
+            value: null
+          },
+          index: {
+            type: Number,
+            value: null
+          }
+        }
+      });
+    </script>
+  </dom-module>
+
+  <dom-module id="x-parent">
+    <template>
+      <style>
+        :host {
+          display: block;
+        }
+      </style>
+      <div id="list" on-click="selectItem">
+        <template is="dom-repeat" items="{{data}}">
+          <x-child 
+            label="{{item.label}}" 
+            selected="{{item.selected}}"
+            index="{{item.index}}"></x-child>  
+        </template>
+      </div>
+    </template>
+    <script>
+
+      function patch() {
+        Polymer.Base._createObservedProperty = function (property, methodName) {
+          this._addPropertyEffect(property, Polymer.Base.PROPERTY_EFFECT_TYPES.OBSERVE, {
+            fn: runObserverEffectPatched,
+            info: {
+              strictlyMatchProperty: property,
+              methodName: methodName
+            }
+          });
+        };
+        
+        function runObserverEffectPatched (inst, property, value, old, info) {
+          let fn = inst[info.methodName];
+          if (fn) {
+            if (info.strictlyMatchProperty === property) {
+              fn.call(inst, value, old);
+            }
+          } else {
+            console.warn('observer method `' + info.methodName + '` not defined');
+          }
+        }
+      }
+
+      patch(); // TODO: uncomment this line to apply probable fix
+
+      Polymer({
+        is: 'x-parent',
+        properties: {
+          data: {
+            type: Array,
+            value: null,
+            observer:'dataChanged'
+          },
+          selecedIndex: {
+            type: Number,
+            value: null,
+            observer: 'selectedIndexChanged'
+          }
+        },
+
+        observers: [
+          'dataStar(data.*)'
+        ],
+
+        dataChanged: function(newData, oldData) {
+          // if (typeof newData !== 'object') return;
+          console.log('x-parent :: dataChanged : ', newData);
+        },
+
+        dataStar: function(e) {
+          console.log("x-parent :: dataStar : a sub property changed: ", e, arguments);
+        },
+
+        selectItem: function(e) {
+          let path = e.path;
+          let match = null;
+          path.some(function(item, i) {
+            match = item;
+            return item.tagName && item.tagName.toLowerCase() === 'x-child';
+          });
+          this.selecedIndex = match.index;
+        },
+        selectedIndexChanged: function(newIndex, oldIndex) {
+          if (newIndex !== null && typeof newIndex === 'number') {
+            // doesn't require notify:
+            this.set('data.' + newIndex + '.selected', true);
+
+            // just notify:
+            // this.notifyPath('data.' + newIndex + '.selected', true);
+          } 
+          if (oldIndex !== null && typeof oldIndex === 'number') {
+            // doesn't require notify:
+            this.set('data.' + oldIndex + '.selected', false);
+
+            // just notify:
+            // this.notifyPath('data.' + oldIndex + '.selected', false);
+          }
+        }
+      });
+    </script>
+  </dom-module>
+  
+  <x-parent></x-parent>
+  
+  <script>
+    HTMLImports.whenReady(function() {
+      let app = document.querySelector('x-parent');
+      let data = [
+        {index:0, label:'Label 1', selected:false},
+        {index:1, label:'Label 2', selected:false},
+        {index:2, label:'Label 3', selected:false},
+        {index:3, label:'Label 4', selected:false},
+        {index:4, label:'Label 5', selected:false},
+        {index:5, label:'Label 6', selected:false},
+        {index:6, label:'Label 7', selected:false},
+        {index:7, label:'Label 8', selected:false},
+        {index:8, label:'Label 9', selected:false},
+        {index:9, label:'Label 10', selected:false}
+      ];
+      app.data = data;
+    });
+  </script>
+  
+</body>
+</html>
