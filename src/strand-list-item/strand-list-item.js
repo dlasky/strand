@@ -46,6 +46,8 @@
 				type: String,
 				value: false
 			},
+			// TODO: Causing inifinite loop... no ideas
+			// See dropdown, where this gets set
 			showPlaceholder: {
 				type: Boolean,
 				value: false

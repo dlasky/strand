@@ -83,7 +83,8 @@
 			data: {
 				type: Array,
 				notify: true,
-				observer: '_dataChanged'
+				observer: '_dataChanged',
+				value: null
 			},
 			value: {
 				type: String,
@@ -133,17 +134,20 @@
 		_widthLocked: false,
 		LAYOUT_TYPE: 'dropdown',
 
-		created: function() {
+		// created: function() {
+		// },
+
+		ready: function() {
 			// Flag to suppress change events if an initial value is provided
 			this.initialValue = this.hasAttribute('value');
-		},
-
-		attached: function() {
+			
 			this._panel = this.$.panel;
 			this._itemRecycler = this.$.itemRecycler;
 			this._target = this.$.target;
 			this._stackTarget = this.$.panel;
+		},
 
+		attached: function() {
 			// ensure layout attribute on search field... this is stupid but no other way to
 			// add layout attribute, cause 'slotchange' isn't supposed to fire when an instance is initialized
 			// ...but apparantly DOES when the lightDOM is added to another instance
@@ -208,7 +212,7 @@
 				}
 
 				if (item) index = this.items.indexOf(item); 
-				if (index && index !== this.selectedIndex) this.selectedIndex = index;
+				if (index > -1 && index !== this.selectedIndex) this.selectedIndex = index;
 			});
 		},
 
