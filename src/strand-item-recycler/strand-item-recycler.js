@@ -118,8 +118,6 @@ found here: https://github.com/Polymer/core-list
 		this.footer = null;
 	}
 
-
-
 	function elementHeight (element) {
 		return element.getBoundingClientRect().height; // Firefox uses doubles
 		// return element.offsetHeight; // only provides integers
@@ -127,10 +125,8 @@ found here: https://github.com/Polymer/core-list
 
 	function roundMaybe (value) {
 		return value;
-		//return 0|value; // somewhat related to elementHeight() above
+		// return 0|value; // somewhat related to elementHeight() above
 	}
-
-
 
 	scope.ItemRecycler = Polymer({
 		is: 'strand-item-recycler',
@@ -664,10 +660,14 @@ found here: https://github.com/Polymer/core-list
 		},
 
 		_needsInitialization: function (data, _templateFound) {
-			console.log('_needsInitialization:', data, _templateFound);
-			this._initializable = true;
-			this._initialized = false;
-			this.initialize();
+			// TODO: needs an observerd method patch, because this
+			// still fires when data[item].subproperty changes (._.)
+			if (!this._initialized) {
+				console.log('_needsInitialization:', data, _templateFound);
+				this._initializable = true;
+				this._initialized = false;
+				this.initialize();
+			}
 		},
 
 		initialize: function () {

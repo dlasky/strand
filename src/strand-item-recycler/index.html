@@ -40,7 +40,6 @@
 		</strand-item-recycler>
 		-->
 
-		<!--
 		<strand-item-recycler id="itemRecycler2" unresolved>
 			<div slot="header" style="font-family: sans-serif; font-size: 13px; background: #ccc; padding:5px;">Header<br/>Text</div>
 			<div slot="footer" style="font-family: sans-serif; font-size: 13px; background: #ccc; padding:5px;">Footer<br/>Text<br/>Too</div>
@@ -63,8 +62,10 @@
 				</div>
 			</template>
 		</strand-item-recycler>
-		-->
 
+
+		<!-- more simple test case -->
+		<!--
 		<strand-item-recycler
 			id="listItemRecycler">
 			<template slot="template">
@@ -82,6 +83,7 @@
 				</strand-list-item>
 			</template>
 		</strand-item-recycler>
+		--> 
 
 	</div>
 	
@@ -146,8 +148,8 @@
 			itemRecycler = all[2];
 			(itemRecycler || {}).data = data;
 
-			var listItemRecycler = document.querySelector('#listItemRecycler');
-			listItemRecycler.data = listItems;
+			// var listItemRecycler = document.querySelector('#listItemRecycler');
+			// listItemRecycler.data = listItems;
 
 			document.querySelector("#switch").onclick = function () {
 				if (toggle.style.display !== "none") {
@@ -159,8 +161,6 @@
 					// });
 				}
 			};
-
-
 
 			// setTimeout(function () {
 			// 	//itemRecycler.data = data.slice(data.length >> 2, data.length >> 1);

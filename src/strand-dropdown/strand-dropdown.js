@@ -112,6 +112,7 @@
 			StrandTraits.Resolvable,
 			StrandTraits.Stylable,
 			StrandTraits.KeySelectable,
+			// StrandTraits.Selectable,
 			StrandTraits.Stackable,
 			StrandTraits.Jqueryable,
 			StrandTraits.AutoTogglable,
@@ -194,8 +195,9 @@
 
 		_selectItemByValue: function(value) {
 			Polymer.RenderStatus.afterNextRender(this, function(){
-				var item = null;
 				var valueStr = value.toString();
+				var item = null;
+				var index = null;
 
 				if (!this._widthLocked) this._lockWidth();
 
@@ -204,12 +206,13 @@
 				} else {
 					item = this._getDomByValue(valueStr);
 				}
-				if (item) this.selectedIndex = this.items.indexOf(item);
+
+				if (item) index = this.items.indexOf(item); 
+				if (index && index !== this.selectedIndex) this.selectedIndex = index;
 			});
 		},
 
 		_updateSelectedItem: function(e) {
-			// var target = Polymer.dom(e).path[0];
 			var target = null;
 			
 			e.path.some(function(item, index){
@@ -262,7 +265,7 @@
 				if (this.updateSelection) {
 					this.selectedIndex = null;
 				} else {
-					// this.reset();
+					this.reset();
 				}
 			} else {
 				// reset the GUI selection state but leave 'value' alone
@@ -315,16 +318,19 @@
 
 		// General
 		_valueChanged: function(newVal, oldVal) {
-			if (newVal) this._selectItemByValue(newVal);
-			// if (newVal) {
-			// 	this._selectItemByValue(newVal);
-			// } else {
-			// 	this.reset();
-			// }
+			if (newVal) {
+				this._selectItemByValue(newVal);
+			} else {
+				this.reset();
+			}
 		},
 
 		_selectedIndexChanged: function(newIndex, oldIndex) {
-			if (typeof newIndex === 'number') {
+			var newIsNum = typeof newIndex === 'number';
+			var oldIsNum = typeof oldIndex === 'number';
+			var same = newIndex === oldIndex ? true : false;
+
+			if (newIsNum && !same) {
 				var newSelected = this.items[newIndex];
 				var value = newSelected.value ? newSelected.value.toString() : newSelected.textContent.trim();
 				var name = newSelected.name ? newSelected.name : newSelected.textContent.trim();
@@ -355,7 +361,7 @@
 				}
 			}
 
-			if (typeof oldIndex === 'number') {
+			if (oldIsNum && !same) {
 				var oldSelected = this.items[oldIndex];
 
 				if (this.data) {

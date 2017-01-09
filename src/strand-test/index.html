@@ -68,6 +68,7 @@
     <script>
 
       function patch() {
+
         Polymer.Base._createObservedProperty = function (property, methodName) {
           this._addPropertyEffect(property, Polymer.Base.PROPERTY_EFFECT_TYPES.OBSERVE, {
             fn: runObserverEffectPatched,
@@ -88,6 +89,7 @@
             console.warn('observer method `' + info.methodName + '` not defined');
           }
         }
+        
       }
 
       patch(); // TODO: uncomment this line to apply probable fix
@@ -136,7 +138,7 @@
 
             // just notify:
             // this.notifyPath('data.' + newIndex + '.selected', true);
-          } 
+          }
           if (oldIndex !== null && typeof oldIndex === 'number') {
             // doesn't require notify:
             this.set('data.' + oldIndex + '.selected', false);
