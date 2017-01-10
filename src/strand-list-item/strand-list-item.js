@@ -51,7 +51,7 @@
 			showPlaceholder: {
 				type: Boolean,
 				value: false,
-				observer: '_showPlaceholderChanged'
+				// observer: '_showPlaceholderChanged'
 			},
 			randomWidth: {
 				type: String,
@@ -82,21 +82,17 @@
 			return String(Math.round(width*100) + "%");
 		},
 
-		_showPlaceholderChanged: function(newVal, oldVal) {
-			console.log('_showPlaceholderChanged :: newVal: ', newVal, ' ', 'oldVal: ', oldVal);
-		},
+		// TODO: test placeholder if !model
+		// _showPlaceholderChanged: function(newVal, oldVal) {
+		// 	console.log('_showPlaceholderChanged :: newVal: ', newVal, ' ', 'oldVal: ', oldVal);
+		// },
 
 		_getStrandHighlightText: function() {
 			var nodes = this.getEffectiveChildren();
 			var highlight = nodes.filter(function(item) {
 				return item.tagName && item.tagName.toLowerCase() === 'strand-highlight'
 			})[0];
-			
-			if (highlight) {
-				return highlight.text;
-			} else {
-				return false;
-			}
+			return highlight ? highlight.text : false;
 		},
 
 		updateTitle: function() {
