@@ -50,7 +50,8 @@
 			// See dropdown, where this gets set
 			showPlaceholder: {
 				type: Boolean,
-				value: false
+				value: false,
+				observer: '_showPlaceholderChanged'
 			},
 			randomWidth: {
 				type: String,
@@ -67,9 +68,9 @@
 			"mouseover":"_updateTitleHandler"
 		},
 
-		attached: function () {
-			this.debounce("update-title",this.updateTitle,0);
-		},
+		// attached: function () {
+		// 	this.debounce("update-title",this.updateTitle,0);
+		// },
 
 		_updateTitleHandler: function() {
 			this.debounce("update-title",this.updateTitle,0);
@@ -81,12 +82,30 @@
 			return String(Math.round(width*100) + "%");
 		},
 
+		_showPlaceholderChanged: function(newVal, oldVal) {
+			console.log('_showPlaceholderChanged :: newVal: ', newVal, ' ', 'oldVal: ', oldVal);
+		},
+
+		_getStrandHighlightText: function() {
+			var nodes = this.getEffectiveChildren();
+			var highlight = nodes.filter(function(item) {
+				return item.tagName && item.tagName.toLowerCase() === 'strand-highlight'
+			})[0];
+			
+			if (highlight) {
+				return highlight.text;
+			} else {
+				return false;
+			}
+		},
+
 		updateTitle: function() {
 			var m = StrandLib.Measure;
-			var computed = m.textWidth(this, this.textContent);
+			var t = this._getStrandHighlightText() || this.textContent;
+			var computed = m.textWidth(this, t);
 			var actual = m.getBoundingClientRect(this).width - Measure.getPaddingWidth(this);
 			if (computed > actual) {
-				var txt = this.textContent.trim();
+				var txt = t.trim();
 				if (this.title !== txt)
 					this.title = txt;
 			} else {
