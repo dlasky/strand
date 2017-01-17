@@ -347,7 +347,10 @@
 				smallDataTest = document.querySelector("#smallDataTest");
 				
 				dataTest.data = createData(100, "Readable Very Long Name Here");
-				dataTest.value = 1;
+				// dataTest.value = 1;
+				
+				// test empty data items:
+				// dataTest.data = new Array(100);
 				
 				dataTestHidden.data = createData(100, "Some badgers have stink");
 				dataTestHidden.value = 1;
@@ -355,8 +358,6 @@
 				dataTestShort.data = createData(100, "wet dog smells bad");
 				smallDataTest.data = createData(100, "Hi there guyz");
 
-				// // test empty data items:
-				// dataTest.data = new Array(100);
 
 				// init jQuery test:
 				$d = $("#dynamic");

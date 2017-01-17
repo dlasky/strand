@@ -94,9 +94,7 @@
 			},
 			highlight:{
 				type:String,
-				notify:true,
-				value:"",
-				observer: '_highlightChanged'
+				notify:true
 			},
 			maxItems: {
 				type: Number,
@@ -290,7 +288,7 @@
 		},
 
 		_highlightChanged: function() {
-			this.notifyPath('ref.highlight', this.highlight);
+			// this.notifyPath('ref.highlight', this.highlight);
 		},
 
 		// Getters

@@ -1,54 +1,759 @@
 <script>
-/**
- * @license
- * Copyright (c) 2015 MediaMath Inc. All rights reserved.
- * This code may only be used under the BSD style license found at http://mediamath.github.io/strand/LICENSE.txt
+    /**
+     * @license
+     * Copyright (c) 2015 MediaMath Inc. All rights reserved.
+     * This code may only be used under the BSD style license found at http://mediamath.github.io/strand/LICENSE.txt
 
-*/
-(function (scope) {
+    */
+    (function(scope) {
 
-	var PolymerPatch = {	
+        var PolymerPatch = {
 
-		_polymerPatched : false,
-		
-		_patch: function() {
+            _polymerPatched: false,
 
-			Polymer.Base._createObservedProperty = function (property, methodName) {
-				this._addPropertyEffect(property, Polymer.Base.PROPERTY_EFFECT_TYPES.OBSERVE, {
-					fn: runObserverEffectPatched,
-					info: {
-						strictlyMatchProperty: property,
-						methodName: methodName
-					}
-				});
-			};
-			
-			function runObserverEffectPatched (inst, property, value, old, info) {
-				let fn = inst[info.methodName];
-				if (fn) {
-					if (info.strictlyMatchProperty === property) {
-						fn.call(inst, value, old);
-					}
-				} else {
-					console.warn('observer method `' + info.methodName + '` not defined');
-				}
-			}
-			
-			this._polymerPatched = true;
-		}
-	};
+            _patch: function() {
 
-	if (window.Polymer && !PolymerPatch._polymerPatched) {
-		PolymerPatch._patch();
-	}
+                Polymer.Base._createObservedProperty = function _createObservedProperty(property, methodName) {
+                    this._addPropertyEffect(property, TYPES.OBSERVE, {
+                        fn: runObserverEffect,
+                        info: {
+                            property: property,
+                            methodName: methodName
+                        }
+                    });
+                }
 
-	window.addEventListener('WebComponentsReady', function(e) {
-		if (window.Polymer && !PolymerPatch._polymerPatched) {
-			PolymerPatch._patch();
-		}
-		console.log('polymer patched : ', PolymerPatch._polymerPatched);
-	});
+                Polymer.Base._createMethodObserver = function _createMethodObserver(expression) {
+                    let sig = parseMethod(expression);
+                    if (!sig) {
+                        throw new Error("Malformed observer expression '" + expression + "'");
+                    }
+                    createMethodEffect(this, sig, TYPES.OBSERVE, runMethodObserverEffect);
+                }
 
-	scope.PolymerPatch = PolymerPatch;
-})(window.StrandLib = window.StrandLib || {});
+                Polymer.Base._createComputedProperty = function _createComputedProperty(property, expression) {
+                    let sig = parseMethod(expression);
+                    if (!sig) {
+                        throw new Error("Malformed computed expression '" + expression + "'");
+                    }
+                    createMethodEffect(this, sig, TYPES.COMPUTE, runComputedEffect, property);
+                }
+
+                Polymer.Base._bindTemplate = function _bindTemplate(template) {
+                    this[TYPES.PROPAGATE] = {};
+                    let notes = this._parseTemplateAnnotations(template);
+                    processAnnotations(notes);
+                    for (let i = 0, note;
+                        (i < notes.length) && (note = notes[i]); i++) {
+                        let b$ = note.bindings;
+                        for (let j = 0, binding;
+                            (j < b$.length) && (binding = b$[j]); j++) {
+                            if (shouldAddListener(binding)) {
+                                addAnnotatedListener(this, i, binding.name,
+                                    binding.parts[0].value,
+                                    binding.parts[0].event,
+                                    binding.parts[0].negate);
+                            }
+                            addBindingEffect(this, binding, i);
+                        }
+                    }
+                }
+
+
+
+                const CaseMap = Polymer.CaseMap;
+                const mixin = Polymer.Utils.mixin;
+
+                let effectUid = 0;
+
+                const TYPES = {
+                    ANY: '__propertyEffects',
+                    COMPUTE: '__computeEffects',
+                    REFLECT: '__reflectEffects',
+                    NOTIFY: '__notifyEffects',
+                    PROPAGATE: '__propagateEffects',
+                    OBSERVE: '__observeEffects',
+                    READ_ONLY: '__readOnly'
+                }
+
+                function ensureOwnEffectMap(model, type) {
+                    let effects = model[type];
+                    if (!effects) {
+                        effects = model[type] = {};
+                    } else if (!model.hasOwnProperty(type)) {
+                        effects = model[type] = Object.create(model[type]);
+                        for (let p in effects) {
+                            effects[p] = effects[p].slice();
+                        }
+                    }
+                    return effects;
+                }
+
+
+                function runEffects(inst, type, props, oldProps) {
+                    let ran;
+                    let effects = inst[type];
+                    if (effects) {
+                        let id = effectUid++;
+                        for (let prop in props) {
+                            if (runEffectsForProperty(inst, effects, id, prop, props[prop],
+                                    oldProps && oldProps[prop])) {
+                                ran = true;
+                            }
+                        }
+                    }
+                    return ran;
+                }
+
+                function runEffectsForProperty(inst, effects, id, prop, value, old) {
+                    let ran;
+                    let rootProperty = Polymer.Path.root(prop);
+                    let fxs = effects[rootProperty];
+                    if (fxs) {
+                        let fromAbove = inst.__dataFromAbove;
+                        for (let i = 0, l = fxs.length, fx;
+                            (i < l) && (fx = fxs[i]); i++) {
+                            if (Polymer.Path.matches(fx.path, prop) &&
+                                (!fx.info || fx.info.lastRun !== id)) {
+                                if (rootProperty !== prop) {
+                                    let v = Polymer.Path.get(inst, prop);
+                                    if (v === undefined) {
+                                        v = value;
+                                    }
+                                } else {
+                                    value = inst[prop];
+                                }
+                                if (true !== fx.fn(inst, prop, value, old, fx.info, fromAbove)) {
+                                    if (fx.info) {
+                                        fx.info.lastRun = id;
+                                    }
+                                }
+                                ran = true;
+                            }
+                        }
+                    }
+                    return ran;
+                }
+
+                function runObserverEffect(inst, property, value, old, info) {
+                    let fn = inst[info.methodName];
+                    if (fn) {
+                        if (info.property === property) {
+                            fn.call(inst, value, old);
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else {
+                        console.warn('observer method `' + info.methodName + '` not defined');
+                        return true;
+                    }
+                }
+
+                function runNotifyEffects(inst, props, oldProps) {
+                    let notified;
+                    let notifyEffects = inst[TYPES.NOTIFY];
+                    let id = effectUid++;
+                    for (let prop in props) {
+                        if (notifyEffects && runEffectsForProperty(inst, notifyEffects, id,
+                                prop, props[prop], oldProps && oldProps[prop])) {
+                            notified = true;
+                        } else if (notifyPath(inst, prop, props[prop])) {
+                            notified = true;
+                        }
+                    }
+                    let host;
+                    if (notified && (host = inst.__dataHost) && host.setProperties) {
+                        host._flushProperties();
+                    }
+                }
+
+                function notifyPath(inst, path, value) {
+                    let rootProperty = Polymer.Path.root(path);
+                    if (rootProperty !== path) {
+                        let eventName = Polymer.CaseMap.camelToDashCase(rootProperty) + '-changed';
+                        dispatchNotifyEvent(inst, eventName, value, path);
+                        return true;
+                    }
+                }
+
+                function dispatchNotifyEvent(inst, eventName, value, path) {
+                    let detail = {
+                        value: value,
+                        queueProperty: true
+                    };
+                    if (path) {
+                        detail.path = path;
+                    }
+                    inst.dispatchEvent(new CustomEvent(eventName, {
+                        detail
+                    }));
+                }
+
+                function runNotifyEffect(inst, property, value, old, info) {
+                    let rootProperty = Polymer.Path.root(property);
+                    let path = rootProperty != property ? property : null;
+                    dispatchNotifyEvent(inst, info.eventName, value, path);
+                    return false;
+                }
+
+                function addNotifyListener(node, inst, info) {
+                    node.addEventListener(info.event, function(e) {
+                        handleNotification(e, inst, info.property, info.path, info.negate);
+                    });
+                }
+
+                function handleNotification(e, inst, property, path, negate) {
+                    let value;
+                    let targetPath = e.detail && e.detail.path;
+                    if (targetPath) {
+                        path = Polymer.Path.translate(property, path, targetPath);
+                        value = e.detail && e.detail.value;
+                    } else {
+                        value = e.target[property];
+                    }
+                    value = negate ? !value : value;
+                    setPropertyFromNotification(inst, path, value, e);
+                }
+
+                function setPropertyFromNotification(inst, path, value, event) {
+                    let detail = event.detail;
+                    if (detail && detail.queueProperty) {
+                        if (!inst._hasReadOnlyEffect(path)) {
+                            if ((path = inst._setPathOrUnmanagedProperty(path, value, Boolean(detail.path)))) {
+                                inst._setPendingProperty(path, value);
+                            }
+                        }
+                    } else {
+                        inst.set(path, value);
+                    }
+                }
+
+                function runReflectEffect(inst, property, value, old, info) {
+                    if (Polymer.sanitizeDOMValue) {
+                        value = Polymer.sanitizeDOMValue(value, info.attrName, 'attribute', inst);
+                    }
+                    inst._propertyToAttribute(property, info.attrName, value);
+                    return false;
+                }
+
+                function runMethodObserverEffect(inst, property, value, old, info) {
+                    if (isEffectPropertyRelevant(property, info)) {
+                        runMethodEffect(inst, property, value, old, info);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                function runComputedEffects(inst, changedProps, oldProps) {
+                    if (inst[TYPES.COMPUTE]) {
+                        let inputProps = changedProps;
+                        let computedProps;
+                        while (runEffects(inst, TYPES.COMPUTE, inputProps)) {
+                            mixin(oldProps, inst.__dataOld);
+                            mixin(changedProps, inst.__dataPending);
+                            computedProps = mixin(computedProps || {}, inst.__dataPending);
+                            inputProps = inst.__dataPending;
+                            inst.__dataPending = null;
+                        }
+                        return computedProps;
+                    }
+                }
+
+                function runComputedEffect(inst, property, value, old, info) {
+                    if (isEffectPropertyRelevant(property, info)) {
+                        var result = runMethodEffect(inst, property, value, old, info);
+                        var computedProp = info.methodInfo;
+                        if (inst._hasPropertyEffect(computedProp)) {
+                            inst._setPendingProperty(computedProp, result);
+                        } else {
+                            inst[computedProp] = result;
+                        }
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                function computeLinkedPaths(inst, changedProps, computedProps) {
+                    const links = inst.__dataLinkedPaths;
+                    const cache = inst.__dataTemp;
+                    if (links) {
+                        computedProps = computedProps || {};
+                        let link;
+                        for (let a in links) {
+                            let b = links[a];
+                            for (let path in changedProps) {
+                                if (Polymer.Path.isDescendant(a, path)) {
+                                    link = Polymer.Path.translate(a, b, path);
+                                    cache[link] = changedProps[link] = computedProps[link] = changedProps[path];
+                                } else if (Polymer.Path.isDescendant(b, path)) {
+                                    link = Polymer.Path.translate(b, a, path);
+                                    cache[link] = changedProps[link] = computedProps[link] = changedProps[path];
+                                }
+                            }
+                        }
+                    }
+                    return computedProps;
+                }
+
+
+                function addBindingEffect(model, note, index) {
+                    for (let i = 0; i < note.parts.length; i++) {
+                        let part = note.parts[i];
+                        if (part.signature) {
+                            addMethodBindingEffect(model, note, part, index);
+                        } else if (!part.literal) {
+                            if (note.kind === 'attribute' && note.name[0] === '-') {
+                                console.warn('Cannot set attribute ' + note.name +
+                                    ' because "-" is not a valid attribute starting character');
+                            } else {
+                                model._addPropertyEffect(part.value, TYPES.PROPAGATE, {
+                                    fn: runBindingEffect,
+                                    info: {
+                                        kind: note.kind,
+                                        index: index,
+                                        name: note.name,
+                                        propertyName: note.propertyName,
+                                        value: part.value,
+                                        isCompound: note.isCompound,
+                                        compoundIndex: part.compoundIndex,
+                                        event: part.event,
+                                        customEvent: part.customEvent,
+                                        negate: part.negate
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+
+                function runBindingEffect(inst, path, value, old, info) {
+                    let node = inst.__dataNodes[info.index];
+                    if ((path.length > info.value.length) &&
+                        (info.kind == 'property') && !info.isCompound &&
+                        node._hasPropertyEffect && node._hasPropertyEffect(info.name)) {
+                        path = Polymer.Path.translate(info.value, info.name, path);
+                        setPropertyToNodeFromBinding(inst, node, path, value);
+                    } else {
+                        if (path != info.value) {
+                            value = Polymer.Path.get(inst, info.value);
+                        }
+                        applyBindingValue(inst, info, value);
+                    }
+                    return false;
+                }
+
+                function setPropertyToNodeFromBinding(inst, node, prop, value) {
+                    if (!node._hasReadOnlyEffect(prop)) {
+                        if (node._setPendingProperty(prop, value)) {
+                            inst._enqueueClient(node);
+                        }
+                    }
+                }
+
+                function applyBindingValue(inst, info, value) {
+                    let node = inst.__dataNodes[info.index];
+                    value = computeBindingValue(node, value, info);
+                    if (Polymer.sanitizeDOMValue) {
+                        value = Polymer.sanitizeDOMValue(value, info.name, info.kind, node);
+                    }
+                    if (info.kind == 'attribute') {
+                        inst._valueToNodeAttribute(node, value, info.name);
+                    } else {
+                        let prop = info.name;
+                        if (node._hasPropertyEffect && node._hasPropertyEffect(prop)) {
+                            setPropertyToNodeFromBinding(inst, node, prop, value);
+                        } else if (value !== node[prop] || typeof value == 'object') {
+                            node[prop] = value;
+                        }
+                    }
+                }
+
+                function computeBindingValue(node, value, info) {
+                    if (info.negate) {
+                        value = !value;
+                    }
+                    if (info.isCompound) {
+                        let storage = node.__dataCompoundStorage[info.name];
+                        storage[info.compoundIndex] = value;
+                        value = storage.join('');
+                    }
+                    if (info.kind !== 'attribute') {
+                        if (info.name === 'textContent' ||
+                            (node.localName == 'input' && info.name == 'value')) {
+                            value = value == undefined ? '' : value;
+                        }
+                    }
+                    return value;
+                }
+
+                function addMethodBindingEffect(model, note, part, index) {
+                    createMethodEffect(model, part.signature, TYPES.PROPAGATE,
+                        runMethodBindingEffect, {
+                            index: index,
+                            isCompound: note.isCompound,
+                            compoundIndex: part.compoundIndex,
+                            kind: note.kind,
+                            name: note.name,
+                            negate: part.negate,
+                            part: part
+                        }, true
+                    );
+                }
+
+                function runMethodBindingEffect(inst, property, value, old, info) {
+                    if (isEffectPropertyRelevant(property, info)) {
+                        let val = runMethodEffect(inst, property, value, old, info);
+                        applyBindingValue(inst, info.methodInfo, val);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                function processAnnotations(notes) {
+                    if (!notes._processed) {
+                        for (let i = 0; i < notes.length; i++) {
+                            let note = notes[i];
+                            for (let j = 0; j < note.bindings.length; j++) {
+                                let b = note.bindings[j];
+                                for (let k = 0; k < b.parts.length; k++) {
+                                    let p = b.parts[k];
+                                    if (!p.literal) {
+                                        p.signature = parseMethod(p.value);
+                                        if (!p.signature) {
+                                            p.rootProperty = Polymer.Path.root(p.value);
+                                        }
+                                    }
+                                }
+                            }
+                            if (note.templateContent) {
+                                processAnnotations(note.templateContent._notes);
+                                let hostProps = note.templateContent._hostProps =
+                                    discoverTemplateHostProps(note.templateContent._notes);
+                                let bindings = [];
+                                for (let prop in hostProps) {
+                                    bindings.push({
+                                        index: note.index,
+                                        kind: 'property',
+                                        name: '_host_' + prop,
+                                        parts: [{
+                                            mode: '{',
+                                            rootProperty: prop,
+                                            value: prop
+                                        }]
+                                    });
+                                }
+                                note.bindings = note.bindings.concat(bindings);
+                            }
+                        }
+                        notes._processed = true;
+                    }
+                }
+
+                function discoverTemplateHostProps(notes) {
+                    let hostProps = {};
+                    for (let i = 0, n;
+                        (i < notes.length) && (n = notes[i]); i++) {
+                        for (let j = 0, b$ = n.bindings, b;
+                            (j < b$.length) && (b = b$[j]); j++) {
+                            for (let k = 0, p$ = b.parts, p;
+                                (k < p$.length) && (p = p$[k]); k++) {
+                                if (p.signature) {
+                                    let args = p.signature.args;
+                                    for (let kk = 0; kk < args.length; kk++) {
+                                        let rootProperty = args[kk].rootProperty;
+                                        if (rootProperty) {
+                                            hostProps[rootProperty] = true;
+                                        }
+                                    }
+                                    hostProps[p.signature.methodName] = true;
+                                } else {
+                                    if (p.rootProperty) {
+                                        hostProps[p.rootProperty] = true;
+                                    }
+                                }
+                            }
+                        }
+                        if (n.templateContent) {
+                            let templateHostProps = n.templateContent._hostProps;
+                            Polymer.Base.mixin(hostProps, templateHostProps);
+                        }
+                    }
+                    return hostProps;
+                }
+
+                function shouldAddListener(binding) {
+                    return binding.name &&
+                        binding.kind != 'attribute' &&
+                        binding.kind != 'text' &&
+                        !binding.isCompound &&
+                        binding.parts[0].mode === '{';
+                }
+
+                function addAnnotatedListener(model, index, property, path, event, negate) {
+                    if (!model._bindListeners) {
+                        model._bindListeners = [];
+                    }
+                    let eventName = event ||
+                        (CaseMap.camelToDashCase(property) + '-changed');
+                    model._bindListeners.push({
+                        index: index,
+                        property: property,
+                        path: path,
+                        event: eventName,
+                        negate: negate
+                    });
+                }
+
+                function setupBindListeners(inst) {
+                    let b$ = inst._bindListeners;
+                    for (let i = 0, l = b$.length, info;
+                        (i < l) && (info = b$[i]); i++) {
+                        let node = inst.__dataNodes[info.index];
+                        addNotifyListener(node, inst, info);
+                    }
+                }
+
+                function setupBindings(inst, dom, notes) {
+                    if (notes.length) {
+                        let nodes = new Array(notes.length);
+                        for (let i = 0; i < notes.length; i++) {
+                            let note = notes[i];
+                            let node = nodes[i] = inst._findTemplateAnnotatedNode(dom, note);
+                            node.__dataHost = inst;
+                            if (note.bindings) {
+                                setupCompoundBinding(note, node);
+                            }
+                        }
+                        inst.__dataNodes = nodes;
+                    }
+                    if (inst._bindListeners) {
+                        setupBindListeners(inst);
+                    }
+                }
+
+
+                function createMethodEffect(model, sig, type, effectFn, methodInfo, dynamic) {
+                    let info = {
+                        methodName: sig.methodName,
+                        args: sig.args,
+                        methodInfo: methodInfo,
+                        dynamicFn: dynamic
+                    };
+                    if (sig.static) {
+                        model._addPropertyEffect('__static__', type, {
+                            fn: effectFn,
+                            info: info
+                        });
+                    } else {
+                        for (let i = 0, arg;
+                            (i < sig.args.length) && (arg = sig.args[i]); i++) {
+                            if (!arg.literal) {
+                                model._addPropertyEffect(arg.name, type, {
+                                    fn: effectFn,
+                                    info: info
+                                });
+                            }
+                        }
+                    }
+                    if (dynamic) {
+                        model._addPropertyEffect(sig.methodName, type, {
+                            fn: effectFn,
+                            info: info
+                        });
+                    }
+                }
+
+                function isEffectPropertyRelevant(property, info) {
+                    for (let i = 0, arg;
+                        (i < info.args.length) && (arg = info.args[i]); i++) {
+                        if (property === arg.name) {
+                            return true;
+                        } else if (arg.wildcard && Polymer.Path.isDescendant(arg.name, property)) {
+                            return true;
+                        } else if (arg.structured && Polymer.Path.isDescendant(property, arg.name)) {
+                            return true;
+                        }
+                    }
+                    return false
+                }
+
+                function runMethodEffect(inst, property, value, old, info) {
+                    let context = inst._rootDataHost || inst;
+                    let fn = context[info.methodName];
+                    if (fn) {
+                        let args = marshalArgs(inst.__data, info.args, property, value);
+                        return fn.apply(context, args);
+                    } else if (!info.dynamicFn) {
+                        console.warn('method `' + info.methodName + '` not defined');
+                    }
+                }
+
+                const emptyArray = [];
+
+                function parseMethod(expression) {
+                    let m = expression.match(/([^\s]+?)\(([\s\S]*)\)/);
+                    if (m) {
+                        let sig = {
+                            methodName: m[1],
+                            static: true
+                        };
+                        if (m[2].trim()) {
+                            let args = m[2].replace(/\\,/g, '&comma;').split(',');
+                            return parseArgs(args, sig);
+                        } else {
+                            sig.args = emptyArray;
+                            return sig;
+                        }
+                    }
+                }
+
+                function parseArgs(argList, sig) {
+                    sig.args = argList.map(function(rawArg) {
+                        let arg = parseArg(rawArg);
+                        if (!arg.literal) {
+                            sig.static = false;
+                        }
+                        return arg;
+                    }, this);
+                    return sig;
+                }
+
+                function parseArg(rawArg) {
+                    let arg = rawArg.trim()
+                        .replace(/&comma;/g, ',')
+                        .replace(/\\(.)/g, '\$1');
+                    let a = {
+                        name: arg
+                    };
+                    let fc = arg[0];
+                    if (fc === '-') {
+                        fc = arg[1];
+                    }
+                    if (fc >= '0' && fc <= '9') {
+                        fc = '#';
+                    }
+                    switch (fc) {
+                        case "'":
+                        case '"':
+                            a.value = arg.slice(1, -1);
+                            a.literal = true;
+                            break;
+                        case '#':
+                            a.value = Number(arg);
+                            a.literal = true;
+                            break;
+                    }
+                    if (!a.literal) {
+                        a.rootProperty = Polymer.Path.root(arg);
+                        a.structured = Polymer.Path.isDeep(arg);
+                        if (a.structured) {
+                            a.wildcard = (arg.slice(-2) == '.*');
+                            if (a.wildcard) {
+                                a.name = arg.slice(0, -2);
+                            }
+                        }
+                    }
+                    return a;
+                }
+
+                function marshalArgs(data, args, path, value) {
+                    let values = [];
+                    for (let i = 0, l = args.length; i < l; i++) {
+                        let arg = args[i];
+                        let name = arg.name;
+                        let v;
+                        if (arg.literal) {
+                            v = arg.value;
+                        } else if (path == name) {
+                            v = value;
+                        } else {
+                            v = data[name];
+                            if (v === undefined && arg.structured) {
+                                v = Polymer.Path.get(data, name);
+                            }
+                        }
+                        if (arg.wildcard) {
+                            let baseChanged = (name.indexOf(path + '.') === 0);
+                            let matches = (path.indexOf(name) === 0 && !baseChanged);
+                            values[i] = {
+                                path: matches ? path : name,
+                                value: matches ? value : v,
+                                base: v
+                            };
+                        } else {
+                            values[i] = v;
+                        }
+                    }
+                    return values;
+                }
+
+                function setupCompoundBinding(note, node) {
+                    let bindings = note.bindings;
+                    for (let i = 0; i < bindings.length; i++) {
+                        let binding = bindings[i];
+                        if (binding.isCompound) {
+                            let storage = node.__dataCompoundStorage ||
+                                (node.__dataCompoundStorage = {});
+                            let parts = binding.parts;
+                            let literals = new Array(parts.length);
+                            for (let j = 0; j < parts.length; j++) {
+                                literals[j] = parts[j].literal;
+                            }
+                            let name = binding.name;
+                            storage[name] = literals;
+                            if (binding.literal && binding.kind == 'property') {
+                                node[name] = binding.literal;
+                            }
+                        }
+                    }
+                }
+
+
+                function notifySplices(inst, array, path, splices) {
+                    let splicesPath = path + '.splices';
+                    inst._setProperty(splicesPath, {
+                        indexSplices: splices
+                    });
+                    inst._setProperty(path + '.length', array.length);
+                    inst.__data[splicesPath] = {
+                        indexSplices: null
+                    };
+                }
+
+                function notifySplice(inst, array, path, index, addedCount, removed) {
+                    notifySplices(inst, array, path, [{
+                        index: index,
+                        addedCount: addedCount,
+                        removed: removed,
+                        object: array,
+                        type: 'splice'
+                    }]);
+                }
+
+                function upper(name) {
+                    return name[0].toUpperCase() + name.substring(1);
+                }
+
+                this._polymerPatched = true;
+            }
+
+        };
+
+        if (window.Polymer && !PolymerPatch._polymerPatched) {
+            PolymerPatch._patch();
+        }
+
+        window.addEventListener('WebComponentsReady', function(e) {
+            if (window.Polymer && !PolymerPatch._polymerPatched) {
+                PolymerPatch._patch();
+            }
+            console.log('polymer patched : ', PolymerPatch._polymerPatched);
+        });
+
+        scope.PolymerPatch = PolymerPatch;
+    })(window.StrandLib = window.StrandLib || {});
 </script>
